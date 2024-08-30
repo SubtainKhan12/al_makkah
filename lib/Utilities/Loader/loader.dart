@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:al_makkah/Utilities/Colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class CircularIndicator {
@@ -20,7 +21,9 @@ class CircularIndicator {
               ),
               // The Circular Progress Indicator
               Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: ColorsUtils.appcolor,
+                ),
               ),
             ],
           ),

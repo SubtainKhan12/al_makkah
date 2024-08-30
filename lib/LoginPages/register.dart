@@ -1,26 +1,17 @@
-import 'dart:convert';
-import 'package:al_makkah/LoginPages/register.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:al_makkah/LoginPages/loginscreen.dart';
+import 'package:al_makkah/Utilities/Colors/colors.dart';
+import 'package:al_makkah/Utilities/Loader/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart' as http;
-import '../APIs/apis.dart';
-import '../InstallerPanel/DashboardScreens/Dashboard/dashboard.dart';
-import '../Models/LoginModel/LoginModel.dart';
-import '../SharedPreferences/sharedPreferences.dart';
-import '../Utilities/Colors/colors.dart';
-import '../Utilities/Loader/loader.dart';
-import '../Utilities/Snackbar/snackbar.dart';
 
-class LoginUI extends StatefulWidget {
-  const LoginUI({super.key});
+class RegisterUI extends StatefulWidget {
+  const RegisterUI({super.key});
 
   @override
-  State<LoginUI> createState() => _LoginUIState();
+  State<RegisterUI> createState() => _RegisterUIState();
 }
 
-class _LoginUIState extends State<LoginUI> {
-  LoginModel? loginModelList;
+class _RegisterUIState extends State<RegisterUI> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
@@ -30,25 +21,24 @@ class _LoginUIState extends State<LoginUI> {
       _obscureText = !_obscureText;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Material(
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-              // gradient: LinearGradient(
-              //     begin: Alignment.topLeft,
-              //     end: Alignment.bottomRight,
-              //     colors: [
-              //   Color(0xffF6EACB),
-              //   // Colors.black,
-              //   Colors.white24,
-              // ])
+            // gradient: LinearGradient(
+            //     begin: Alignment.topLeft,
+            //     end: Alignment.bottomRight,
+            //     colors: [
+            //   Color(0xffF6EACB),
+            //   // Colors.black,
+            //   Colors.white24,
+            // ])
             color: Color(0xffFFF6EA),
           ),
           child: Column(
@@ -68,7 +58,7 @@ class _LoginUIState extends State<LoginUI> {
               ),
               Container(
                 width: _width * 0.85,
-                height: _height * 0.5,
+                height: _height * 0.6,
                 decoration: const BoxDecoration(
                   color: Color(0xffF6EACB),
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -79,28 +69,46 @@ class _LoginUIState extends State<LoginUI> {
                     const SizedBox(
                       height: 30,
                     ),
-                     Text(
-                      "Hello",
-                      style:
-                          TextStyle(color: ColorsUtils.baigeColor,fontSize: 28, fontWeight: FontWeight.bold),
+                    const Text(
+                      "Please Register Your Account",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
                     ),
                     const SizedBox(
                       height: 30,
                     ),
-                    SizedBox(
+                    Container(
+                      width: _width * 0.67,
+                      height: _height * 0.07,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            labelText: "Name",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                            )),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
                       width: _width * 0.67,
                       height: _height * 0.07,
                       child: TextField(
                         controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                             suffix: Icon(
                               FontAwesomeIcons.envelope,
-                              color: Colors.red,
+                              color: Colors.grey,
                             ),
                             labelText: "Email Address",
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -118,57 +126,55 @@ class _LoginUIState extends State<LoginUI> {
                               onPressed: _toggleObscureText,
                               icon: Icon(_obscureText
                                   ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye),
+                                  : FontAwesomeIcons.eye,color:Colors.grey,),
                             ),
                             labelText: "Password",
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterUI()));
-                            },
-                            child:  Text(
-                              "Register",
-                              style: TextStyle(color: ColorsUtils.baigeColor),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Container(
+                      width: _width * 0.67,
+                      height: _height * 0.07,
+                      child: TextField(
+                        maxLength: 11,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            suffix: Icon(
+                              FontAwesomeIcons.mobile,
+                              color: Colors.grey,
                             ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-
-                            },
-                            child:  Text(
-                              "Forget Password",
-                              style: TextStyle(color: ColorsUtils.baigeColor),
-                            ),
-                          )
-                        ],
+                            labelText: "Mobile No",
+                            counterText: '',
+                            border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                            )),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 12,
                     ),
                     InkWell(
                       onTap: () {
-                        post_login();
                         CircularIndicator.showLoader(context);
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        width: 250,
-                        decoration:  BoxDecoration(
+                        width: _width * 0.67,
+                        decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(7)),
-                            color: ColorsUtils.baigeColor
-                        ),
+                          color: ColorsUtils.baigeColor
+                            ),
                         child: const Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
-                            'Login',
+                            'Register',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -177,16 +183,9 @@ class _LoginUIState extends State<LoginUI> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 17,
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'New Job',
-                          style: TextStyle(color: ColorsUtils.baigeColor),
-                        )),
-                   
+                    TextButton(onPressed: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginUI()));
+                    }, child:  Text('Already have an Account?',style: TextStyle(color: ColorsUtils.baigeColor),))
                     // const SizedBox(height: 15,),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -216,59 +215,11 @@ class _LoginUIState extends State<LoginUI> {
                     // )
                   ],
                 ),
-              ),
-              SizedBox(height: 130,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Icon(FontAwesomeIcons.bolt,color: Colors.yellow,size: 15,),
-                SizedBox(width: 5,),
-                RichText(text: TextSpan(
-                  children: [
-                    TextSpan(text: "Powered by ",style: TextStyle(color: ColorsUtils.blackColor)),
-                    TextSpan(text: "Crystal ",style: TextStyle(color: ColorsUtils.blueCrystal,fontWeight: FontWeight.bold)),
-                    TextSpan(text: "Solutions",style: TextStyle(color: ColorsUtils.orangeCrystal,fontWeight: FontWeight.bold)),
-                  ]
-                ))
-              ],)
+              )
             ],
           ),
         ),
       ),
     );
-  }
-
-//
-  Future<void> post_login() async {
-    // FocusScope.of(context).unfocus();
-    var response = await http.post(Uri.parse(login), body: {
-      'userid': _emailController.text,
-      'password': _passwordController.text,
-    });
-
-    var result = jsonDecode(response.body);
-
-    print('Response: $result');
-
-    if (result['error'] == 200) {
-      Navigator.pop(context);
-      loginModelList = LoginModel.fromJson(result);
-
-      if (loginModelList?.user?.tusrtyp == 'Installar' &&
-          loginModelList?.user?.tusrid == _emailController.text.trim() &&
-          loginModelList?.user?.tusrpwd == _passwordController.text) {
-        Shared_pref.saveuser(loginModelList!.user!);
-        // var sharedPref = await SharedPreferences.getInstance();
-        // sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const DashboardUI()));
-        Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
-      }
-    } else {
-      _emailController.clear();
-      _passwordController.clear();
-      Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
-      Navigator.pop(context);
-    }
   }
 }
