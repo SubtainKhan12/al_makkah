@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:al_makkah/LoginPages/register.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -41,14 +40,14 @@ class _LoginUIState extends State<LoginUI> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-              // gradient: LinearGradient(
-              //     begin: Alignment.topLeft,
-              //     end: Alignment.bottomRight,
-              //     colors: [
-              //   Color(0xffF6EACB),
-              //   // Colors.black,
-              //   Colors.white24,
-              // ])
+            // gradient: LinearGradient(
+            //     begin: Alignment.topLeft,
+            //     end: Alignment.bottomRight,
+            //     colors: [
+            //   Color(0xffF6EACB),
+            //   // Colors.black,
+            //   Colors.white24,
+            // ])
             color: Color(0xffFFF6EA),
           ),
           child: Column(
@@ -61,14 +60,16 @@ class _LoginUIState extends State<LoginUI> {
                 height: _height * 0.25,
                 width: _width * 0.55,
                 // color: Color(0xffAAB396),
-                child: Image.asset("assets/al-makkah.png",),
+                child: Image.asset(
+                  "assets/al-makkah.png",
+                ),
               ),
               const SizedBox(
                 height: 10,
               ),
               Container(
                 width: _width * 0.85,
-                height: _height * 0.5,
+                height: _height * 0.45,
                 decoration: const BoxDecoration(
                   color: Color(0xffF6EACB),
                   borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -77,22 +78,14 @@ class _LoginUIState extends State<LoginUI> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      height: 30,
-                    ),
-                     Text(
-                      "Hello",
-                      style:
-                          TextStyle(color: ColorsUtils.baigeColor,fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(
-                      height: 30,
+                      height: 50,
                     ),
                     SizedBox(
                       width: _width * 0.67,
                       height: _height * 0.07,
                       child: TextField(
                         controller: _emailController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             suffix: Icon(
                               FontAwesomeIcons.envelope,
                               color: Colors.red,
@@ -121,7 +114,7 @@ class _LoginUIState extends State<LoginUI> {
                                   : FontAwesomeIcons.eye),
                             ),
                             labelText: "Password",
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                             )),
@@ -133,24 +126,38 @@ class _LoginUIState extends State<LoginUI> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterUI()));
-                            },
-                            child:  Text(
-                              "Register",
-                              style: TextStyle(color: ColorsUtils.baigeColor),
-                            ),
-                          ),
+                              onPressed: () {},
+                              child: Text(
+                                'New Job',
+                                style: TextStyle(color: ColorsUtils.baigeColor),
+                              )),
                           TextButton(
                             onPressed: () {
-
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const RegisterUI()));
                             },
-                            child:  Text(
-                              "Forget Password",
+                            child: Text(
+                              "Register",
                               style: TextStyle(color: ColorsUtils.baigeColor),
                             ),
                           )
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Forget Password",
+                            style: TextStyle(color: ColorsUtils.baigeColor),
+                          ),
+                        ),
                       ),
                     ),
                     InkWell(
@@ -161,10 +168,10 @@ class _LoginUIState extends State<LoginUI> {
                       child: Container(
                         alignment: Alignment.center,
                         width: 250,
-                        decoration:  BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(7)),
-                            color: ColorsUtils.baigeColor
-                        ),
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(7)),
+                            color: ColorsUtils.baigeColor),
                         child: const Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
@@ -180,57 +187,53 @@ class _LoginUIState extends State<LoginUI> {
                     const SizedBox(
                       height: 17,
                     ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'New Job',
-                          style: TextStyle(color: ColorsUtils.baigeColor),
-                        )),
-                   
-                    // const SizedBox(height: 15,),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //   children: [
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //             FontAwesomeIcons.facebook, color: Colors.blue)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.google, color: Colors.redAccent,)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.twitter, color: Colors
-                    //             .orangeAccent,)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.linkedinIn, color: Colors.green,)
-                    //     )
-                    //   ],
-                    // )
+
                   ],
                 ),
               ),
-              SizedBox(height: 130,),
+              const SizedBox(
+                height: 160,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                Icon(FontAwesomeIcons.bolt,color: Colors.yellow,size: 15,),
-                SizedBox(width: 5,),
-                RichText(text: TextSpan(
-                  children: [
-                    TextSpan(text: "Powered by ",style: TextStyle(color: ColorsUtils.blackColor)),
-                    TextSpan(text: "Crystal ",style: TextStyle(color: ColorsUtils.blueCrystal,fontWeight: FontWeight.bold)),
-                    TextSpan(text: "Solutions",style: TextStyle(color: ColorsUtils.orangeCrystal,fontWeight: FontWeight.bold)),
-                  ]
-                ))
-              ],)
+                  Image.asset('assets/CrystalSolutionslogo.png',height: 30,),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Column(
+                    children: [
+                      RichText(
+                          text: TextSpan(children: [
+                        TextSpan(
+                            text: "Powered by ",
+                            style: TextStyle(color: ColorsUtils.blackColor)),
+                        TextSpan(
+                            text: "Crystal ",
+                            style: TextStyle(
+                                color: ColorsUtils.blueCrystal,
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: "Solutions",
+                            style: TextStyle(
+                                color: ColorsUtils.orangeCrystal,
+                                fontWeight: FontWeight.bold)),
+                      ])),
+                      RichText(
+                          text: TextSpan(children: [
+                            TextSpan(
+                                text: "Contact us: ",
+                                style: TextStyle(color: ColorsUtils.blackColor)),
+                            TextSpan(
+                                text: "+92 304 4770075",
+                                style: TextStyle(
+                                    color: ColorsUtils.blueCrystal,
+                                    fontWeight: FontWeight.bold)),
+                          ])),
+                    ],
+                  ),
+                ],
+              )
             ],
           ),
         ),

@@ -21,6 +21,7 @@ class _RegisterUIState extends State<RegisterUI> {
       _obscureText = !_obscureText;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     var _height = MediaQuery.of(context).size.height;
@@ -51,7 +52,9 @@ class _RegisterUIState extends State<RegisterUI> {
                 height: _height * 0.25,
                 width: _width * 0.55,
                 // color: Color(0xffAAB396),
-                child: Image.asset("assets/al-makkah.png",),
+                child: Image.asset(
+                  "assets/al-makkah.png",
+                ),
               ),
               const SizedBox(
                 height: 10,
@@ -82,12 +85,12 @@ class _RegisterUIState extends State<RegisterUI> {
                     Container(
                       width: _width * 0.67,
                       height: _height * 0.07,
-                      child: TextField(
+                      child: const TextField(
                         decoration: InputDecoration(
                             labelText: "Name",
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -100,7 +103,7 @@ class _RegisterUIState extends State<RegisterUI> {
                       child: TextField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             suffix: Icon(
                               FontAwesomeIcons.envelope,
                               color: Colors.grey,
@@ -108,7 +111,7 @@ class _RegisterUIState extends State<RegisterUI> {
                             labelText: "Email Address",
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -124,14 +127,17 @@ class _RegisterUIState extends State<RegisterUI> {
                         decoration: InputDecoration(
                             suffix: IconButton(
                               onPressed: _toggleObscureText,
-                              icon: Icon(_obscureText
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye,color:Colors.grey,),
+                              icon: Icon(
+                                _obscureText
+                                    ? FontAwesomeIcons.eyeSlash
+                                    : FontAwesomeIcons.eye,
+                                color: Colors.grey,
+                              ),
                             ),
                             labelText: "Password",
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -141,7 +147,7 @@ class _RegisterUIState extends State<RegisterUI> {
                     Container(
                       width: _width * 0.67,
                       height: _height * 0.07,
-                      child: TextField(
+                      child: const TextField(
                         maxLength: 11,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -153,7 +159,7 @@ class _RegisterUIState extends State<RegisterUI> {
                             counterText: '',
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -168,9 +174,9 @@ class _RegisterUIState extends State<RegisterUI> {
                         alignment: Alignment.center,
                         width: _width * 0.67,
                         decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(7)),
-                          color: ColorsUtils.baigeColor
-                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(7)),
+                            color: ColorsUtils.baigeColor),
                         child: const Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
@@ -183,36 +189,17 @@ class _RegisterUIState extends State<RegisterUI> {
                         ),
                       ),
                     ),
-                    TextButton(onPressed: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginUI()));
-                    }, child:  Text('Already have an Account?',style: TextStyle(color: ColorsUtils.baigeColor),))
-                    // const SizedBox(height: 15,),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    //   children: [
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //             FontAwesomeIcons.facebook, color: Colors.blue)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.google, color: Colors.redAccent,)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.twitter, color: Colors
-                    //             .orangeAccent,)
-                    //     ),
-                    //     IconButton(
-                    //         onPressed: () {},
-                    //         icon: const Icon(
-                    //           FontAwesomeIcons.linkedinIn, color: Colors.green,)
-                    //     )
-                    //   ],
-                    // )
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>  const LoginUI()));
+                        },
+                        child: Text(
+                          'Already have an Account?',
+                          style: TextStyle(color: ColorsUtils.baigeColor),
+                        ))
                   ],
                 ),
               )
