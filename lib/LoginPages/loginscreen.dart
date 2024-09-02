@@ -240,8 +240,6 @@ class _LoginUIState extends State<LoginUI> {
       ),
     );
   }
-
-//
   Future<void> post_login() async {
     // FocusScope.of(context).unfocus();
     var response = await http.post(Uri.parse(login), body: {
@@ -250,23 +248,17 @@ class _LoginUIState extends State<LoginUI> {
     });
 
     var result = jsonDecode(response.body);
-
-    print('Response: $result');
+    loginModelList = LoginModel.fromJson(result);
 
     if (result['error'] == 200) {
       Navigator.pop(context);
-      loginModelList = LoginModel.fromJson(result);
-
-      if (loginModelList?.user?.tusrtyp == 'Installar' &&
-          loginModelList?.user?.tusrid == _emailController.text.trim() &&
-          loginModelList?.user?.tusrpwd == _passwordController.text) {
         Shared_pref.saveuser(loginModelList!.user!);
         // var sharedPref = await SharedPreferences.getInstance();
         // sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const DashboardUI()));
         Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
-      }
+
     } else {
       _emailController.clear();
       _passwordController.clear();
