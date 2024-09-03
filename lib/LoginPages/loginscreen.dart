@@ -184,15 +184,187 @@ class _LoginUIState extends State<LoginUI> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 17,
-                    ),
 
                   ],
                 ),
               ),
               const SizedBox(
-                height: 160,
+                height: 15,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomersUI()));
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(20),
+                            elevation: 10,
+                            shadowColor: const Color(0xffF6EACB),
+                            child: Container(
+                              height: _height * 0.06,
+                              width: _width * 0.4,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffF6EACB),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: _width * 0.03,
+                                  ),
+                                  Image.asset(
+                                    'assets/install.png',
+                                    color: Colors.blueAccent,
+                                    height: 30,
+                                  ),
+                                  const VerticalDivider(
+                                    color: Colors.black,
+                                    thickness: 1,
+                                  ),
+                                  // SizedBox(width: 20,),
+                                  const Text(
+                                    'AC Installation',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: (){
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(5),
+                            elevation: 10,
+                            shadowColor: const Color(0xffF6EACB),
+                            child: Container(
+                              height: _height * 0.06,
+                              width: _width * 0.4,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffF6EACB),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: _width * 0.03,
+                                  ),
+                                  Image.asset(
+                                    'assets/clean.png',
+                                    color: Colors.blueAccent,
+                                    height: 30,
+                                  ),
+                                  const VerticalDivider(
+                                    color: Colors.black,
+                                    thickness: 1,
+                                  ),
+                                  // SizedBox(width: 20,),
+                                  const Text(
+                                    'Ac Service',
+                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Material(
+                          borderRadius: BorderRadius.circular(5),
+                          elevation: 10,
+                          shadowColor: const Color(0xffF6EACB),
+                          child: Container(
+                            height: _height * 0.06,
+                            width: _width * 0.4,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffF6EACB),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: _width * 0.03,
+                                ),
+                                Image.asset(
+                                  'assets/complaint.png',
+                                  color: Colors.red,
+                                  height: 30,
+                                ),
+                                const VerticalDivider(
+                                  color: Colors.black,
+                                  thickness: 1,
+                                ),
+                                // SizedBox(width: 20,),
+                                const Text(
+                                  'New Complain',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Material(
+                          borderRadius: BorderRadius.circular(5),
+                          elevation: 10,
+                          shadowColor: const Color(0xffF6EACB),
+                          child: Container(
+                            height: _height * 0.06,
+                            width: _width * 0.4,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffF6EACB),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: _width * 0.03,
+                                ),
+                                Image.asset(
+                                  'assets/customer-ratings.png',
+                                  color: Colors.red,
+                                  height: 30,
+                                ),
+                                const VerticalDivider(
+                                  color: Colors.black,
+                                  thickness: 1,
+                                ),
+                                // SizedBox(width: 20,),
+                                const Text(
+                                  'Complain Status',
+                                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
