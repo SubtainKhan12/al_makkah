@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:al_makkah/LoginPages/register.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../APIs/apis.dart';
 import '../InstallerPanel/DashboardScreens/Dashboard/dashboard.dart';
@@ -57,7 +56,7 @@ class _LoginUIState extends State<LoginUI> {
                 height: 50,
               ),
               Container(
-                height: _height * 0.25,
+                height: _height * 0.22,
                 width: _width * 0.55,
                 // color: Color(0xffAAB396),
                 child: Image.asset(
@@ -87,7 +86,7 @@ class _LoginUIState extends State<LoginUI> {
                         controller: _emailController,
                         decoration: const InputDecoration(
                             suffix: Icon(
-                              FontAwesomeIcons.envelope,
+                              Icons.email_outlined,
                               color: Colors.red,
                             ),
                             labelText: "Email Address",
@@ -110,9 +109,8 @@ class _LoginUIState extends State<LoginUI> {
                             suffix: IconButton(
                               onPressed: _toggleObscureText,
                               icon: Icon(_obscureText
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye),
-                            ),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility)),
                             labelText: "Password",
                             border: const OutlineInputBorder(
                               borderRadius:
@@ -225,7 +223,7 @@ class _LoginUIState extends State<LoginUI> {
                                     height: 30,
                                   ),
                                   const VerticalDivider(
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                     thickness: 1,
                                   ),
                                   // SizedBox(width: 20,),
@@ -266,7 +264,7 @@ class _LoginUIState extends State<LoginUI> {
                                     height: 30,
                                   ),
                                   const VerticalDivider(
-                                    color: Colors.black,
+                                    color: Colors.grey,
                                     thickness: 1,
                                   ),
                                   // SizedBox(width: 20,),
@@ -310,7 +308,7 @@ class _LoginUIState extends State<LoginUI> {
                                   height: 30,
                                 ),
                                 const VerticalDivider(
-                                  color: Colors.black,
+                                  color: Colors.grey,
                                   thickness: 1,
                                 ),
                                 // SizedBox(width: 20,),
@@ -346,7 +344,7 @@ class _LoginUIState extends State<LoginUI> {
                                   height: 30,
                                 ),
                                 const VerticalDivider(
-                                  color: Colors.black,
+                                  color: Colors.grey,
                                   thickness: 1,
                                 ),
                                 // SizedBox(width: 20,),
@@ -364,7 +362,7 @@ class _LoginUIState extends State<LoginUI> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 40,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

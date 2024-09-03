@@ -2,7 +2,6 @@ import 'package:al_makkah/LoginPages/loginscreen.dart';
 import 'package:al_makkah/Utilities/Colors/colors.dart';
 import 'package:al_makkah/Utilities/Loader/loader.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegisterUI extends StatefulWidget {
   const RegisterUI({super.key});
@@ -105,7 +104,7 @@ class _RegisterUIState extends State<RegisterUI> {
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                             suffix: Icon(
-                              FontAwesomeIcons.envelope,
+                              Icons.email_outlined,
                               color: Colors.grey,
                             ),
                             labelText: "Email Address",
@@ -127,12 +126,9 @@ class _RegisterUIState extends State<RegisterUI> {
                         decoration: InputDecoration(
                             suffix: IconButton(
                               onPressed: _toggleObscureText,
-                              icon: Icon(
-                                _obscureText
-                                    ? FontAwesomeIcons.eyeSlash
-                                    : FontAwesomeIcons.eye,
-                                color: Colors.grey,
-                              ),
+                              icon: Icon(_obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                             ),
                             labelText: "Password",
                             border: const OutlineInputBorder(
@@ -152,7 +148,7 @@ class _RegisterUIState extends State<RegisterUI> {
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                             suffix: Icon(
-                              FontAwesomeIcons.mobile,
+                              Icons.phone_android,
                               color: Colors.grey,
                             ),
                             labelText: "Mobile No",
