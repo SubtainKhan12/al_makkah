@@ -3,6 +3,7 @@ import 'package:al_makkah/LoginPages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../APIs/apis.dart';
+import '../AdminPanel/Dashboard Screens/AdminDashboard/adminDashboard.dart';
 import '../InstallerPanel/DashboardScreens/Dashboard/dashboard.dart';
 import '../Models/LoginModel/LoginModel.dart';
 import '../SharedPreferences/sharedPreferences.dart';
@@ -31,13 +32,25 @@ class _LoginUIState extends State<LoginUI> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery.of(context).size.height;
-    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var _width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //     begin: Alignment.topLeft,
@@ -92,7 +105,7 @@ class _LoginUIState extends State<LoginUI> {
                             labelText: "Email Address",
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -107,14 +120,14 @@ class _LoginUIState extends State<LoginUI> {
                         obscureText: _obscureText,
                         decoration: InputDecoration(
                             suffix: IconButton(
-                              onPressed: _toggleObscureText,
-                              icon: Icon(_obscureText
-                                  ? Icons.visibility_off
-                                  : Icons.visibility)),
+                                onPressed: _toggleObscureText,
+                                icon: Icon(_obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility)),
                             labelText: "Password",
                             border: const OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -168,7 +181,7 @@ class _LoginUIState extends State<LoginUI> {
                         width: 250,
                         decoration: BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(7)),
+                            const BorderRadius.all(Radius.circular(7)),
                             color: ColorsUtils.baigeColor),
                         child: const Padding(
                           padding: EdgeInsets.all(12.0),
@@ -197,7 +210,7 @@ class _LoginUIState extends State<LoginUI> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomersUI()));
                           },
                           child: Material(
@@ -230,7 +243,8 @@ class _LoginUIState extends State<LoginUI> {
                                   const Text(
                                     'AC Installation',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w500, fontSize: 12),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -238,7 +252,7 @@ class _LoginUIState extends State<LoginUI> {
                           ),
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
                           },
                           child: Material(
@@ -270,7 +284,9 @@ class _LoginUIState extends State<LoginUI> {
                                   // SizedBox(width: 20,),
                                   const Text(
                                     'Ac Service',
-                                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -315,7 +331,8 @@ class _LoginUIState extends State<LoginUI> {
                                 const Text(
                                   'New Complain',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500, fontSize: 12),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12),
                                 ),
                               ],
                             ),
@@ -350,7 +367,8 @@ class _LoginUIState extends State<LoginUI> {
                                 // SizedBox(width: 20,),
                                 const Text(
                                   'Complain Status',
-                                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12),
+                                  style: TextStyle(fontWeight: FontWeight.w500,
+                                      fontSize: 12),
                                 ),
                               ],
                             ),
@@ -367,7 +385,7 @@ class _LoginUIState extends State<LoginUI> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/CrystalSolutionslogo.png',height: 30,),
+                  Image.asset('assets/CrystalSolutionslogo.png', height: 30,),
                   const SizedBox(
                     width: 5,
                   ),
@@ -375,25 +393,27 @@ class _LoginUIState extends State<LoginUI> {
                     children: [
                       RichText(
                           text: TextSpan(children: [
-                        TextSpan(
-                            text: "Powered by ",
-                            style: TextStyle(color: ColorsUtils.blackColor)),
-                        TextSpan(
-                            text: "Crystal ",
-                            style: TextStyle(
-                                color: ColorsUtils.blueCrystal,
-                                fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: "Solutions",
-                            style: TextStyle(
-                                color: ColorsUtils.orangeCrystal,
-                                fontWeight: FontWeight.bold)),
-                      ])),
+                            TextSpan(
+                                text: "Powered by ",
+                                style: TextStyle(
+                                    color: ColorsUtils.blackColor)),
+                            TextSpan(
+                                text: "Crystal ",
+                                style: TextStyle(
+                                    color: ColorsUtils.blueCrystal,
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: "Solutions",
+                                style: TextStyle(
+                                    color: ColorsUtils.orangeCrystal,
+                                    fontWeight: FontWeight.bold)),
+                          ])),
                       RichText(
                           text: TextSpan(children: [
                             TextSpan(
                                 text: "Contact us: ",
-                                style: TextStyle(color: ColorsUtils.blackColor)),
+                                style: TextStyle(
+                                    color: ColorsUtils.blackColor)),
                             TextSpan(
                                 text: "+92 304 4770075",
                                 style: TextStyle(
@@ -410,31 +430,52 @@ class _LoginUIState extends State<LoginUI> {
       ),
     );
   }
+
   ///---------------Login API Function------------------///////////
   Future<void> post_login() async {
-    // FocusScope.of(context).unfocus();
-    var response = await http.post(Uri.parse(login), body: {
-      'userid': _emailController.text,
-      'password': _passwordController.text,
-    });
+    try {
+      var response = await http.post(Uri.parse(login), body: {
+        'userid': _emailController.text.trim(),
+        'password': _passwordController.text.trim(),
+      });
 
-    var result = jsonDecode(response.body);
-    loginModelList = LoginModel.fromJson(result);
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        loginModelList = LoginModel.fromJson(result);
 
-    if (result['error'] == 200) {
-      Navigator.pop(context);
-        Shared_pref.saveuser(loginModelList!.user!);
-        // var sharedPref = await SharedPreferences.getInstance();
-        // sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const DashboardUI()));
-        Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
+        if (loginModelList?.user?.tusrid == _emailController.text.trim() &&
+            loginModelList?.user?.tusrpwd == _passwordController.text.trim()) {
+          Shared_pref.saveuser(loginModelList!.user!);
 
-    } else {
-      _emailController.clear();
-      _passwordController.clear();
-      Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
-      Navigator.pop(context);
+          if (loginModelList?.user?.tusrtyp == 'Technician') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const DashboardUI()),
+                  (Route<dynamic> route) => false,
+            );
+            Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
+          } else if (loginModelList?.user?.tusrtyp == 'Admin') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const AdminDashboardUI()),
+                  (Route<dynamic> route) => false,
+            );
+            Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
+          }
+        } else {
+          _emailController.clear();
+          _passwordController.clear();
+          Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
+        }
+      } else {
+        Snackbar.showSnackBar(context, 'Login Failed', Colors.red);
+      }
+    } catch (e) {
+      // Handle network or JSON parsing errors
+      Snackbar.showSnackBar(context, 'An error occurred. Please try again.', Colors.red);
     }
   }
+
 }
+
+

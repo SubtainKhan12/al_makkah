@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../APIs/apis.dart';
 import '../../../LoginPages/loginscreen.dart';
-import '../../../Models/InstallerStatus/InstallarStatusModel.dart';
+// import '../../../Models/InstallerStatus/InstallarStatusModel.dart';
 import '../../../Utilities/Colors/colors.dart';
 import '../Assigned/assigned.dart';
 import '../Installed/installed.dart';
@@ -20,14 +20,14 @@ class DashboardUI extends StatefulWidget {
 }
 
 class _DashboardUIState extends State<DashboardUI> {
-  InstallarStatusModel? installerStatusList;
+  // InstallarStatusModel? installerStatusList;
   String? colCode;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getLoginInfo();
+    // getLoginInfo();
   }
 
   @override
@@ -107,7 +107,7 @@ class _DashboardUIState extends State<DashboardUI> {
                                     color: ColorsUtils.greyColor)),
                             child: Center(
                                 child: Text(
-                                  installerStatusList?.assigned.toString() ??
+                                  // installerStatusList?.assigned.toString() ??
                                       '0',
                                   style:  TextStyle(
                                       fontSize: 53,
@@ -164,7 +164,7 @@ class _DashboardUIState extends State<DashboardUI> {
                                     color: ColorsUtils.greyColor)),
                             child: Center(
                                 child: Text(
-                                  installerStatusList?.installed.toString() ??
+                                  // installerStatusList?.installed.toString() ??
                                       '0',
                                   style: TextStyle(
                                       fontSize: 53,
@@ -219,7 +219,8 @@ class _DashboardUIState extends State<DashboardUI> {
                                 border: Border.all(color: ColorsUtils.greyColor)),
                             child: Center(
                                 child: Text(
-                                  installerStatusList?.pending.toString() ?? '0',
+                                  // installerStatusList?.pending.toString() ??
+                                      '0',
                                   style: TextStyle(fontSize: 53, fontWeight: FontWeight.w500,color:Colors.grey.shade400),
                                 )),
                           )
@@ -236,20 +237,20 @@ class _DashboardUIState extends State<DashboardUI> {
     );
   }
 
-  Future post_InstallarStatus() async {
-    var response = await http.post(Uri.parse(InstallarStatus), body: {
-      'FIntCod': colCode.toString(),
-    });
-    var result = jsonDecode(response.body);
-    setState(() {
-      installerStatusList = InstallarStatusModel.fromJson(result);
-    });
-  }
-
-  getLoginInfo() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    colCode = sp.getString('colCode');
-    setState(() {});
-    post_InstallarStatus();
-  }
+  // Future post_InstallarStatus() async {
+  //   var response = await http.post(Uri.parse(InstallarStatus), body: {
+  //     'FIntCod': colCode.toString(),
+  //   });
+  //   var result = jsonDecode(response.body);
+  //   setState(() {
+  //     installerStatusList = InstallarStatusModel.fromJson(result);
+  //   });
+  // }
+  //
+  // getLoginInfo() async {
+  //   SharedPreferences sp = await SharedPreferences.getInstance();
+  //   colCode = sp.getString('colCode');
+  //   setState(() {});
+  //   post_InstallarStatus();
+  // }
 }
