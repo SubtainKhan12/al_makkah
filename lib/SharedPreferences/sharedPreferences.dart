@@ -14,7 +14,7 @@ class Shared_pref with ChangeNotifier{
     sp.setString("userStatus", user.tusrsts??"");
     sp.setString("userType", user.tusrtyp??"");
     sp.setString("userMobile", user.tmobnum??"");
-    sp.setString("userCode", user.techcod??"");
+    sp.setString("technicianCode", user.techcod??"");
   }
 
 }

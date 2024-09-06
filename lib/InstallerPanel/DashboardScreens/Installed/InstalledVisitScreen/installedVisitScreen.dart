@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import '../../../../APIs/apis.dart';
 import '../../../../Models/GetComplain/GetComplainModel.dart';
-import '../../../../Models/Installed/InstalledModel.dart';
+import '../../../../Models/Installed/InstalledTechnicianJobModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
 import 'VisitForm/installedVisitFormUi.dart';
 
 
 class InstalledVisitScreen extends StatefulWidget {
-  InstalledModel installedModel;
+  InstalledTechnicianJobModel installedModel;
    InstalledVisitScreen({super.key, required this.installedModel});
 
   @override
@@ -17,7 +17,7 @@ class InstalledVisitScreen extends StatefulWidget {
 }
 
 class _InstalledVisitScreenState extends State<InstalledVisitScreen> {
-  List<GetComplainModel> getComplainList = [];
+  List<JobStatusModel> getComplainList = [];
   bool isLoading = true;
   bool isDataEmpty = false;
 
@@ -155,8 +155,8 @@ class _InstalledVisitScreenState extends State<InstalledVisitScreen> {
   }
 
   Future Post_Complain() async {
-    var response = await http.post(Uri.parse(GetComplain), body: {
-      'FCmpNum': widget.installedModel.cmp.toString(),
+    var response = await http.post(Uri.parse(GetJobInfo), body: {
+      'FJobNum': widget.installedModel.tjobnum.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
@@ -168,7 +168,7 @@ class _InstalledVisitScreenState extends State<InstalledVisitScreen> {
         });
       } else {
         for (Map i in result) {
-          getComplainList.add(GetComplainModel.fromJson(i));
+          getComplainList.add(JobStatusModel.fromJson(i));
         }
         setState(() {
           isLoading = false;

@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../APIs/apis.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../Models/Pending/PendingModel.dart';
+import '../../../Models/Pending/TechnicianPendingJobsModel.dart';
 import '../../../Utilities/Colors/colors.dart';
 import 'PendingCustomerProfile/pendingCustomerProfile.dart';
 import 'PendingVisitScreen/pendingVisitScreen.dart';
@@ -19,10 +20,10 @@ class PendingUI extends StatefulWidget {
 }
 
 class _PendingUIState extends State<PendingUI> {
-  List<PendingModel> pendingList = [];
-  List<PendingModel> searchPendingList = [];
-  String? colCode;
-  bool loading = true; // State variable to control the loading state
+  List<TechnicianPendingJobsModel> pendingTechnicianJobList = [];
+  List<TechnicianPendingJobsModel> searchPendingList = [];
+  String? technicianCode;
+  bool loading = true;
 
   @override
   void initState() {
@@ -38,114 +39,118 @@ class _PendingUIState extends State<PendingUI> {
           'Pending Applications',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
-        backgroundColor: ColorsUtils.appcolor,
+        backgroundColor: ColorsUtils.baigeColor,
         iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                search(value);
-              },
-              decoration: InputDecoration(
-                hintText: "Search...",
-                suffixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(
-                    color: Colors.black,
+        child: RefreshIndicator(
+          onRefresh: Post_TechnicianPending,
+          child: Column(
+            children: [
+              TextField(
+                onChanged: (value) {
+                  search(value);
+                },
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  suffixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: loading// Show loader if loading is true
-                  ? Center(child: CircularProgressIndicator())
-                  : searchPendingList
-                          .isEmpty // Show message if no data is available
-                      ? Center(child: Text("No applications are pending",style: TextStyle(fontSize: 16,fontWeight:
-              FontWeight.bold,color: Colors.grey),))
-                      : ListView.builder(
-                          itemCount: searchPendingList.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) =>
-                                      _buildBottomSheet(
-                                          context, searchPendingList[index]),
-                                );
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 5),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            searchPendingList[index]
-                                                .cmp
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xffF58634),
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const Text(
-                                            '  -  ',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          Text(
-                                            searchPendingList[index]
-                                                .date
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        searchPendingList[index]
-                                            .customer
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 12,
+              Expanded(
+                child: loading// Show loader if loading is true
+                    ? const Center(child: CircularProgressIndicator())
+                    : searchPendingList
+                            .isEmpty // Show message if no data is available
+                        ? const Center(child: Text("No applications are pending",style: TextStyle(fontSize: 16,fontWeight:
+                FontWeight.bold,color: Colors.grey),))
+                        : ListView.builder(
+                            itemCount: searchPendingList.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) =>
+                                        _buildBottomSheet(
+                                            context, searchPendingList[index]),
+                                  );
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0, vertical: 5),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              searchPendingList[index]
+                                                  .tjobnum
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xffF58634),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              '  -  ',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Text(
+                                              DateFormat('dd-MM-yyyy').format(DateTime.parse(searchPendingList[index]
+                                                  .tjobdat
+                                                  .toString(),)),
+
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      Text(
-                                        searchPendingList[index]
-                                            .mobile
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 12,
+                                        Text(
+                                          searchPendingList[index]
+                                              .tcstnam
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          searchPendingList[index]
+                                              .tmobnum
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
-            ),
-          ],
+                              );
+                            }),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBottomSheet(BuildContext context, PendingModel model) {
+  Widget _buildBottomSheet(BuildContext context, TechnicianPendingJobsModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -173,7 +178,7 @@ class _PendingUIState extends State<PendingUI> {
                       children: [
                         const SizedBox(height: 16),
                         Text(
-                          model.customer.toString(),
+                          model.tcstnam.toString(),
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -183,10 +188,10 @@ class _PendingUIState extends State<PendingUI> {
                         InkWell(
                           onTap: (){
                             _showPhoneDialog(
-                                model.mobile.toString());
+                                model.tmobnum.toString());
                           },
                           child: Text(
-                            model.mobile.toString(),
+                            model.tmobnum.toString(),
 
                             style:  TextStyle(
                               decoration: TextDecoration.underline,
@@ -199,7 +204,7 @@ class _PendingUIState extends State<PendingUI> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          "Customer CMP: ${model.cmp}",
+                          "Customer CMP: ${model.tjobnum}",
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.grey,
@@ -227,7 +232,7 @@ class _PendingUIState extends State<PendingUI> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                PendingVisitScreen(pendingModel: model,)));
+                                                PendingVisitScreen(technicalPendingModel: model,)));
                           },
                           child: const ListTile(
                             leading: Icon(Icons.location_on),
@@ -247,24 +252,23 @@ class _PendingUIState extends State<PendingUI> {
     );
   }
 
-  Future Post_Pending() async {
-
-    var response = await http.post(Uri.parse(Pending), body: {
-      'FIntCod': colCode.toString(),
+  Future Post_TechnicianPending() async {
+    var response = await http.post(Uri.parse(TechnicianPendingJobs), body: {
+      'FTchCod': technicianCode.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         loading = false;
       });
-      pendingList.clear();
+      pendingTechnicianJobList.clear();
       for (Map i in result) {
-        pendingList.add(PendingModel.fromJson(i));
+        pendingTechnicianJobList.add(TechnicianPendingJobsModel.fromJson(i));
 
       }
       setState(() {
          // Update loading state once data is fetched
-        searchPendingList = List.from(pendingList);
+        searchPendingList = List.from(pendingTechnicianJobList);
       });
     } else {
       setState(() {
@@ -275,22 +279,22 @@ class _PendingUIState extends State<PendingUI> {
 
   getLoginInfo() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    colCode = sp.getString('colCode');
+    technicianCode = sp.getString('technicianCode');
     setState(() {});
-    Post_Pending();
+    Post_TechnicianPending();
   }
 
   void search(String query) {
     setState(() {
-      searchPendingList = pendingList.where((category) {
+      searchPendingList = pendingTechnicianJobList.where((category) {
         final customerNameMatches =
-            category.customer?.toLowerCase().contains(query.toLowerCase()) ??
+            category.tcstnam?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final mobileNumberMatches =
-            category.mobile?.toLowerCase().contains(query.toLowerCase()) ??
+            category.tmobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final complainNumberMatches =
-            category.cmp?.toLowerCase().contains(query.toLowerCase()) ??
+            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         return customerNameMatches || mobileNumberMatches || complainNumberMatches;
       }).toList();
@@ -304,19 +308,19 @@ class _PendingUIState extends State<PendingUI> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Choose an option'),
-          content: Text('Would you like to call or message on WhatsApp?'),
+          title: const Text('Choose an option'),
+          content: const Text('Would you like to call or message on WhatsApp?'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.phone,
                   size: _height * 0.04,
-                  color: Color(0xff06D001)),
+                  color: const Color(0xff06D001)),
               onPressed: () {
                 _makePhoneCall(phoneNumber);
                 Navigator.of(context).pop();
               },
             ),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             InkWell(
               onTap: (){
                 _openWhatsApp(phoneNumber);

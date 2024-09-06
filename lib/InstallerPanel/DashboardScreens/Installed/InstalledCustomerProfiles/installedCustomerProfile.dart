@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'package:al_makkah/Models/GetJobInfo/JobInfoModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:translator/translator.dart';
 import '../../../../APIs/apis.dart';
 
-import '../../../../Models/GetComplain/GetComplainModel.dart';
-import '../../../../Models/Installed/InstalledModel.dart';
+import '../../../../Models/Installed/InstalledTechnicianJobModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
 
 class InstalledCustomerDetail extends StatefulWidget {
-  InstalledModel installedModel;
+  InstalledTechnicianJobModel installedModel;
 
   InstalledCustomerDetail({super.key, required this.installedModel});
 
@@ -20,17 +21,15 @@ class InstalledCustomerDetail extends StatefulWidget {
 }
 
 class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
-  List<GetComplainModel> getComplainList = [];
+  List<JobInfoModel> jobsInfoList = [];
   final translator = GoogleTranslator();
   bool _translatetext = false;
-
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Post_Complain();
+    Post_GetJobInfo();
   }
 
   @override
@@ -43,926 +42,1071 @@ class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
             'Detail',
             style: TextStyle(color: ColorsUtils.whiteColor),
           ),
-          backgroundColor: ColorsUtils.appcolor,
+          backgroundColor: ColorsUtils.baigeColor,
           iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
           actions: [
-            Switch(
-              value: _translatetext,
-              onChanged: (value) {
-                setState(() {
-                  _translatetext = value;
-                });
-              },
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _translatetext = false;
+                      });
+                    },
+                    child: Text(
+                      'Eng',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: !_translatetext ? Colors.yellow : Colors.white,
+                        fontWeight: !_translatetext
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text("|",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: ColorsUtils.whiteColor,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _translatetext = true;
+                      });
+                    },
+                    child: Text(
+                      'اردو',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: _translatetext ? Colors.yellow : Colors.white,
+                        fontWeight: _translatetext
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ]
-      ),
-      body: getComplainList.isEmpty
+          ]),
+      body: jobsInfoList.isEmpty
           ? const Center(
-        child: CircularProgressIndicator(),
-      )
+              child: CircularProgressIndicator(),
+            )
           : ListView.builder(
-          itemCount: getComplainList.length,
-          itemBuilder: (context, index) {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 15.0, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              itemCount: jobsInfoList.length,
+              itemBuilder: (context, index) {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
-                            text: TextSpan(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                                text: TextSpan(children: [
                               TextSpan(
                                   text: 'Complain # : ',
                                   style: TextStyle(
                                       color: ColorsUtils.blackColor,
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
-                                  text: getComplainList[index]
-                                      .comp
+                                  text: jobsInfoList[index]
+                                      .tjobnum
                                       .toString()
                                       .trim(),
                                   style: TextStyle(
                                       color: ColorsUtils.blackColor,
                                       fontWeight: FontWeight.bold)),
                             ])),
-                        RichText(
-                            text: TextSpan(children: [
+                            RichText(
+                                text: TextSpan(children: [
                               TextSpan(
                                   text: 'Date : ',
                                   style: TextStyle(
                                       color: ColorsUtils.blackColor,
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
-                                  text: getComplainList[index]
-                                      .date
-                                      .toString()
-                                      .trim(),
+                                  text: DateFormat('dd-MM-yyyy')
+                                      .format(DateTime.parse(
+                                    jobsInfoList[index]
+                                        .tjobdat
+                                        .toString()
+                                        .trim(),
+                                  )),
                                   style:
-                                  TextStyle(color: ColorsUtils.blackColor)),
+                                      TextStyle(color: ColorsUtils.blackColor)),
                             ]))
-                      ],
-                    ),
-                    const Divider(
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: InputDecorator(
-                          decoration: InputDecoration(
-                              labelText: 'Customer Information',
-                              labelStyle: TextStyle(
-                                  color: ColorsUtils.appcolor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              )),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Mobile#',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Text(getComplainList[index]
-                                            .mobile
-                                            .toString()
-                                            .trim()))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Customer',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: _translatetext == false
-                                              ? Text(getComplainList[index]
-                                              .customer
-                                              .toString()
-                                              .trim())
-                                              : FutureBuilder<String>(
-                                            future: translateTextToUrdu(
-                                                getComplainList[index]
-                                                    .customer
-                                                    .toString()
-                                                    .trim()),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                                return Text('isLoading....'); // Show a spinner while translating
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                  getComplainList[index]
-                                                      .customer
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.bold),
-                                                );
-                                              } else {
-                                                return Text(
-                                                  snapshot.data ??
-                                                      getComplainList[index]
-                                                          .customer
-                                                          .toString()
-                                                          .trim(),
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.bold),
-                                                );
-                                              }
-                                            },
+                          ],
+                        ),
+                        const Divider(
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: InputDecorator(
+                              decoration: InputDecoration(
+                                  labelText: 'Customer Information',
+                                  labelStyle: TextStyle(
+                                      color: ColorsUtils.appcolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  )),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Mobile#',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Address',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Text(jobsInfoList[index]
+                                                .tmobnum
+                                                .toString()
+                                                .trim()))
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: _translatetext == false
-                                              ? Text(getComplainList[index]
-                                              .address1
-                                              .toString()
-                                              .trim())
-                                              : FutureBuilder<String>(
-                                            future: translateTextToUrdu(
-                                                getComplainList[index]
-                                                    .address1
-                                                    .toString()
-                                                    .trim()),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                                return Text('isLoading....'); // Show a spinner while translating
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                  getComplainList[index]
-                                                      .address1
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                    fontSize: 15,),
-                                                );
-                                              } else {
-                                                return Text(
-                                                  snapshot.data ??
-                                                      getComplainList[index]
-                                                          .address1
-                                                          .toString()
-                                                          .trim(),
-                                                  style: TextStyle(
-                                                    fontSize: 15,),
-                                                );
-                                              }
-                                            },
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Customer',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          '',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
                                           child: _translatetext == false
-                                              ? Text(getComplainList[index]
-                                              .address1
-                                              .toString()
-                                              .trim())
+                                              ? Text(jobsInfoList[index]
+                                                  .tcstnam
+                                                  .toString()
+                                                  .trim())
                                               : FutureBuilder<String>(
-                                            future: translateTextToUrdu(
-                                                getComplainList[index]
-                                                    .address2
-                                                    .toString()
-                                                    .trim()),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                                return Text('isLoading....'); // Show a spinner while translating
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                  getComplainList[index]
-                                                      .address2
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                    fontSize: 15,),
-                                                );
-                                              } else {
-                                                return Text(
-                                                  snapshot.data ??
-                                                      getComplainList[index]
-                                                          .address2
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tcstnam
                                                           .toString()
-                                                          .trim(),
-                                                  style: TextStyle(
-                                                    fontSize: 15,),
-                                                );
-                                              }
-                                            },
-                                          ),
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tcstnam
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tcstnam
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
                                         ))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'City',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Address',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: _translatetext == false
+                                              ? Text(jobsInfoList[index]
+                                                  .tadd001
+                                                  .toString()
+                                                  .trim())
+                                              : FutureBuilder<String>(
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tadd001
+                                                          .toString()
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tadd001
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tadd001
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                        ))
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              '',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: _translatetext == false
+                                              ? Text(jobsInfoList[index]
+                                                  .tadd002
+                                                  .toString()
+                                                  .trim())
+                                              : FutureBuilder<String>(
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tadd002
+                                                          .toString()
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tadd002
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tadd002
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                        ))
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'City',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
                                               .city
                                               .toString()
                                               .trim()),
                                         )),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: InputDecorator(
-                          decoration: InputDecoration(
-                              labelText: 'Item Information',
-                              labelStyle: TextStyle(
-                                  color: ColorsUtils.appcolor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              )),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Dealer',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .dealer
+                                  ),
+                                ],
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          child: InputDecorator(
+                              decoration: InputDecoration(
+                                  labelText: 'Item Information',
+                                  labelStyle: TextStyle(
+                                      color: ColorsUtils.appcolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  )),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Company',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .company
                                               .toString()
                                               .trim()),
                                         ))
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Item',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .item
-                                              .toString()
-                                              .trim()),
-                                        )),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Serial No',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .serialNo
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Category',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .category
                                               .toString()
                                               .trim()),
                                         ))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      // height: _height * 0.14,
-                      child: InputDecorator(
-                          decoration: InputDecoration(
-                              labelText: 'Engineer Information',
-                              labelStyle: TextStyle(
-                                  color: ColorsUtils.appcolor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              )),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Engineer',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .installar
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Item',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .titmdsc
                                               .toString()
                                               .trim()),
                                         )),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Mobile No',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                            child: Text(
-                                                getComplainList[index]
-                                                    .installarMobile
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Serial No',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .titmser
+                                              .toString()
+                                              .trim()),
+                                        ))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          // height: _height * 0.14,
+                          child: InputDecorator(
+                              decoration: InputDecoration(
+                                  labelText: 'Engineer Information',
+                                  labelStyle: TextStyle(
+                                      color: ColorsUtils.appcolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  )),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Engineer',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .technician
+                                              .toString()
+                                              .trim()),
+                                        )),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Mobile No',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                                child: Text(jobsInfoList[index]
+                                                    .mobile
                                                     .toString()
                                                     .trim()))),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.18,
-                                        child: const Text(
-                                          'Assign On',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .assignedOn
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Assign On',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .tjobdat
                                               .toString()
                                               .trim()),
                                         ))
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: 'Engineer Visit',
-                          labelStyle: TextStyle(
-                            color: ColorsUtils.appcolor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(0),
-                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )),
                         ),
-                        child: Column(
-                          children: [
-                            if (getComplainList[index]
-                                .date1
-                                .toString()
-                                .trim() !=
-                                'null' ||
-                                getComplainList[index]
-                                    .remarks1
-                                    .toString()
-                                    .trim() !=
-                                    'null')
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: _width * 0.22,
-                                    child: Text(
-                                      getComplainList[index]
-                                          .date1
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .date1
-                                          .toString()
-                                          .trim(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: _width * 0.02,
-                                    child: const Text(
-                                      ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      getComplainList[index]
-                                          .remarks1
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .remarks1
-                                          .toString()
-                                          .trim(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            if (getComplainList[index]
-                                .date2
-                                .toString()
-                                .trim() !=
-                                'null' ||
-                                getComplainList[index]
-                                    .remarks2
-                                    .toString()
-                                    .trim() !=
-                                    'null')
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: _width * 0.22,
-                                    child: Text(
-                                      getComplainList[index]
-                                          .date2
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .date2
-                                          .toString()
-                                          .trim(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: _width * 0.02,
-                                    child: const Text(
-                                      ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      getComplainList[index]
-                                          .remarks2
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .remarks2
-                                          .toString()
-                                          .trim(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            if (getComplainList[index]
-                                .date3
-                                .toString()
-                                .trim() !=
-                                'null' ||
-                                getComplainList[index]
-                                    .remarks3
-                                    .toString()
-                                    .trim() !=
-                                    'null')
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: _width * 0.22,
-                                    child: Text(
-                                      getComplainList[index]
-                                          .date3
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .date3
-                                          .toString()
-                                          .trim(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: _width * 0.02,
-                                    child: const Text(
-                                      ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      getComplainList[index]
-                                          .remarks3
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .remarks3
-                                          .toString()
-                                          .trim(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            if (getComplainList[index]
-                                .date4
-                                .toString()
-                                .trim() !=
-                                'null' ||
-                                getComplainList[index]
-                                    .remarks4
-                                    .toString()
-                                    .trim() !=
-                                    'null')
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: _width * 0.22,
-                                    child: Text(
-                                      getComplainList[index]
-                                          .date4
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .date4
-                                          .toString()
-                                          .trim(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: _width * 0.02,
-                                    child: const Text(
-                                      ':',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    child: Text(
-                                      getComplainList[index]
-                                          .remarks4
-                                          .toString()
-                                          .trim() ==
-                                          'null'
-                                          ? ''
-                                          : getComplainList[index]
-                                          .remarks4
-                                          .toString()
-                                          .trim(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ],
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      // height: _height * 0.14,
-                      // color: Color(0xff9DBDFF),
-                      child: InputDecorator(
-                          decoration: InputDecoration(
-                              labelText: 'Status',
+                        Container(
+                          child: InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: 'Engineer Visit',
                               labelStyle: TextStyle(
-                                  color: ColorsUtils.appcolor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
+                                color: ColorsUtils.appcolor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(0),
-                              )),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                if (jobsInfoList[index]
+                                            .tdat001
+                                            .toString()
+                                            .trim() !=
+                                        'null' ||
+                                    jobsInfoList[index]
+                                            .trem001
+                                            .toString()
+                                            .trim() !=
+                                        'null')
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
                                         width: _width * 0.22,
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .tdat001
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat001
+                                                      .toString()
+                                                      .trim(),
+                                                )),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.02,
                                         child: const Text(
-                                          'Status',
+                                          ':',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
+                                      Flexible(
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .trem001
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : jobsInfoList[index]
+                                                  .trem001
+                                                  .toString()
+                                                  .trim(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                if (jobsInfoList[index]
+                                            .tdat002
+                                            .toString()
+                                            .trim() !=
+                                        'null' ||
+                                    jobsInfoList[index]
+                                            .trem002
+                                            .toString()
+                                            .trim() !=
+                                        'null')
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: _width * 0.22,
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .tdat002
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat002
+                                                      .toString()
+                                                      .trim(),
+                                                )),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.02,
+                                        child: const Text(
+                                          ':',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .trem002
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : jobsInfoList[index]
+                                                  .trem002
+                                                  .toString()
+                                                  .trim(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                if (jobsInfoList[index]
+                                            .tdat003
+                                            .toString()
+                                            .trim() !=
+                                        'null' ||
+                                    jobsInfoList[index]
+                                            .trem003
+                                            .toString()
+                                            .trim() !=
+                                        'null')
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: _width * 0.22,
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .tdat003
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat003
+                                                      .toString()
+                                                      .trim(),
+                                                )),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.02,
+                                        child: const Text(
+                                          ':',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .trem003
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : jobsInfoList[index]
+                                                  .trem003
+                                                  .toString()
+                                                  .trim(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                if (jobsInfoList[index]
+                                            .tdat004
+                                            .toString()
+                                            .trim() !=
+                                        'null' ||
+                                    jobsInfoList[index]
+                                            .trem004
+                                            .toString()
+                                            .trim() !=
+                                        'null')
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: _width * 0.22,
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .tdat004
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat004
+                                                      .toString()
+                                                      .trim(),
+                                                )),
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: _width * 0.02,
+                                        child: const Text(
+                                          ':',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          jobsInfoList[index]
+                                                      .trem004
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
+                                              ? ''
+                                              : jobsInfoList[index]
+                                                  .trem004
+                                                  .toString()
+                                                  .trim(),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          // height: _height * 0.14,
+                          // color: Color(0xff9DBDFF),
+                          child: InputDecorator(
+                              decoration: InputDecoration(
+                                  labelText: 'Status',
+                                  labelStyle: TextStyle(
+                                      color: ColorsUtils.appcolor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  )),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.22,
+                                            child: const Text(
+                                              'Status',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
                                           child: Text(
-                                            getComplainList[index]
-                                                .status
-                                                .toString()
-                                                .trim(),
+                                            jobsInfoList[index]
+                                                        .tjobsts
+                                                        .toString() ==
+                                                    'N'
+                                                ? 'Pending'
+                                                : jobsInfoList[index]
+                                                            .tjobsts
+                                                            .toString() ==
+                                                        'I'
+                                                    ? 'Installed'
+                                                    : jobsInfoList[index]
+                                                                .tjobsts
+                                                                .toString() ==
+                                                            'P'
+                                                        ? 'Pending'
+                                                        : jobsInfoList[index]
+                                                                    .tjobsts
+                                                                    .toString() ==
+                                                                ''
+                                                            ? 'UnAssigned'
+                                                            : jobsInfoList[index]
+                                                                        .tjobsts
+                                                                        .toString() ==
+                                                                    'null'
+                                                                ? 'UnAssigned'
+                                                                : jobsInfoList[
+                                                                        index]
+                                                                    .tjobsts
+                                                                    .toString(),
                                             style: TextStyle(
                                                 color: ColorsUtils.redColor,
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         )),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.22,
-                                        child: const Text(
-                                          'Remarks',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .remarks
-                                              .toString()
-                                              .trim() ==
-                                              'null'
+                                  ),
+                                  if (jobsInfoList[index]
+                                      .tclsrem
+                                      .toString()
+                                      .trim() !=
+                                      'null'
+                                      )
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.22,
+                                            child: const Text(
+                                              'Remarks',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                                      .tclsrem
+                                                      .toString()
+                                                      .trim() ==
+                                                  'null'
                                               ? ''
-                                              : getComplainList[index]
-                                              .remarks
-                                              .toString()
-                                              .trim()),
+                                              : jobsInfoList[index]
+                                                  .tclsrem
+                                                  .toString()
+                                                  .trim()),
                                         )),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                        width: _width * 0.22,
-                                        child: const Text(
-                                          'Close Date',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                    Container(
-                                      width: _width * 0.02,
-                                      child: const Text(
-                                        ':',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      ],
                                     ),
-                                    Container(
-                                      // width: _width * 0.25,
-                                        child: Flexible(
+                                  ),
+                                  if (jobsInfoList[index]
+                                      .tclsdat
+                                      .toString()
+                                      .trim() !=
+                                      'null'
+                                  )
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.22,
+                                            child: const Text(
+                                              'Close Date',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
                                           child: Text(
-                                            getComplainList[index]
-                                                .closeDate
+                                            jobsInfoList[index]
+                                                .tclsdat
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(
@@ -971,40 +1115,34 @@ class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         )),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            );
-          }),
+                  ),
+                );
+              }),
     );
   }
 
-  Future Post_Complain() async {
-    var response = await http.post(Uri.parse(GetComplain), body: {
-      'FCmpNum': widget.installedModel.cmp.toString(),
+  Future Post_GetJobInfo() async {
+    var response = await http.post(Uri.parse(GetJobInfo), body: {
+      'FJobNum': widget.installedModel.tjobnum.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      getComplainList.clear();
+      jobsInfoList.clear();
       for (Map i in result) {
-        getComplainList.add(GetComplainModel.fromJson(i));
+        jobsInfoList.add(JobInfoModel.fromJson(i));
       }
-      setState(() {
-        // loading = false;
-        // searchAssignedList = List.from(assignedList);
-      });
-    } else {
-      // setState(() {
-      //   // loading = false;
-      // });
-    }
+      setState(() {});
+    } else {}
   }
+
   Future<String> translateTextToUrdu(String text) async {
     try {
       final translation = await translator.translate(text, to: 'ur');
@@ -1014,5 +1152,4 @@ class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
       return text; // Fallback to original text if translation fails
     }
   }
-
 }

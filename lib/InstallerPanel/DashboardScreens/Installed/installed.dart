@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../APIs/apis.dart';
-import '../../../Models/Installed/InstalledModel.dart';
+import '../../../Models/Installed/InstalledTechnicianJobModel.dart';
 import '../../../Utilities/Colors/colors.dart';
 import 'InstalledCustomerProfiles/installedCustomerProfile.dart';
-import 'InstalledVisitScreen/installedVisitScreen.dart';
+
 
 class InstalledUI extends StatefulWidget {
   const InstalledUI({super.key});
@@ -18,10 +19,11 @@ class InstalledUI extends StatefulWidget {
 }
 
 class _InstalledUIState extends State<InstalledUI> {
-  List<InstalledModel> installedList = [];
-  List<InstalledModel> searchInstalledList = [];
-  String? colCode;
-  bool loading = true; // State variable to control the loading state
+  List<InstalledTechnicianJobModel> installedTechnicianJobList = [];
+  List<InstalledTechnicianJobModel> searchInstalledList = [];
+  String? technicianCode;
+  bool loading = true;
+
 
   @override
   void initState() {
@@ -37,119 +39,120 @@ class _InstalledUIState extends State<InstalledUI> {
           'Installed Applications',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
-        backgroundColor: ColorsUtils.appcolor,
+        backgroundColor: ColorsUtils.baigeColor,
         iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-        child: Column(
-          children: [
-            TextField(
-              onChanged: (value) {
-                search(value);
-              },
-              decoration: InputDecoration(
-                hintText: "Search...",
-                suffixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: const BorderSide(
-                    color: Colors.black,
+        child: RefreshIndicator(
+          onRefresh: Post_InstalledTechnicianJob,
+          child: Column(
+            children: [
+              TextField(
+                onChanged: (value) {
+                  search(value);
+                },
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  suffixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: loading // Show loader if loading is true
-                  ? Center(child: CircularProgressIndicator())
-                  : searchInstalledList
-                          .isEmpty // Show message if no data is available
-                      ? Center(
-                          child: Text(
-                          "No Application is Installed",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                        ))
-                      : ListView.builder(
-                          itemCount: searchInstalledList.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  builder: (context) => _buildBottomSheet(
-                                      context, searchInstalledList[index]),
-                                );
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 5),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            searchInstalledList[index]
-                                                .cmp
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Color(0xffF58634),
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const Text(
-                                            '  -  ',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          Text(
-                                            searchInstalledList[index]
-                                                .date
-                                                .toString(),
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        searchInstalledList[index]
-                                            .customer
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 12,
+              Expanded(
+                child: loading
+                    ? Center(child: CircularProgressIndicator())
+                    : searchInstalledList
+                            .isEmpty
+                        ? Center(
+                            child: Text(
+                            "No Application is Installed",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          ))
+                        : ListView.builder(
+                            itemCount: searchInstalledList.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => _buildBottomSheet(
+                                        context, searchInstalledList[index]),
+                                  );
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0, vertical: 5),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              searchInstalledList[index]
+                                                  .tjobnum
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color(0xffF58634),
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            const Text(
+                                              '  -  ',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Text(
+                                              DateFormat('dd-MM-yyyy').format(DateTime.parse(searchInstalledList[index].tjobdat.toString())),
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      Text(
-                                        searchInstalledList[index]
-                                            .mobile
-                                            .toString(),
-                                        style: const TextStyle(
-                                          fontSize: 12,
+                                        Text(
+                                          searchInstalledList[index]
+                                              .tcstnam
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          searchInstalledList[index]
+                                              .tmobnum
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
-            ),
-          ],
+                              );
+                            }),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildBottomSheet(BuildContext context, InstalledModel model) {
+  Widget _buildBottomSheet(BuildContext context, InstalledTechnicianJobModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -177,7 +180,7 @@ class _InstalledUIState extends State<InstalledUI> {
                       children: [
                         const SizedBox(height: 16),
                         Text(
-                          model.customer.toString(),
+                          model.tcstnam.toString(),
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -186,10 +189,10 @@ class _InstalledUIState extends State<InstalledUI> {
                         const SizedBox(height: 8),
                         InkWell(
                           onTap: () {
-                            _showPhoneDialog(model.mobile.toString());
+                            _showPhoneDialog(model.tmobnum.toString());
                           },
                           child: Text(
-                            model.mobile.toString(),
+                            model.tmobnum.toString(),
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                               decorationColor: ColorsUtils.appcolor,
@@ -201,7 +204,7 @@ class _InstalledUIState extends State<InstalledUI> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          "Customer CMP: ${model.cmp}",
+                          "Customer CMP: ${model.tjobnum}",
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.grey,
@@ -250,21 +253,21 @@ class _InstalledUIState extends State<InstalledUI> {
     );
   }
 
-  Future Post_Installed() async {
-    var response = await http.post(Uri.parse(Installed), body: {
-      'FIntCod': colCode.toString(),
+  Future Post_InstalledTechnicianJob() async {
+    var response = await http.post(Uri.parse(TechnicianInstalledJobs), body: {
+      'FTchCod': technicianCode.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         loading = false;
       });
-      installedList.clear();
+      installedTechnicianJobList.clear();
       for (Map i in result) {
-        installedList.add(InstalledModel.fromJson(i));
+        installedTechnicianJobList.add(InstalledTechnicianJobModel.fromJson(i));
       }
       setState(() {
-        searchInstalledList = List.from(installedList);
+        searchInstalledList = List.from(installedTechnicianJobList);
       });
     } else {
       setState(() {
@@ -275,22 +278,22 @@ class _InstalledUIState extends State<InstalledUI> {
 
   getLoginInfo() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    colCode = sp.getString('colCode');
+    technicianCode = sp.getString('technicianCode');
     setState(() {});
-    Post_Installed();
+    Post_InstalledTechnicianJob();
   }
 
   void search(String query) {
     setState(() {
-      searchInstalledList = installedList.where((category) {
+      searchInstalledList = installedTechnicianJobList.where((category) {
         final customerNameMatches =
-            category.customer?.toLowerCase().contains(query.toLowerCase()) ??
+            category.tcstnam?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final mobileNumberMatches =
-            category.mobile?.toLowerCase().contains(query.toLowerCase()) ??
+            category.tmobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final complainNumberMatches =
-            category.cmp?.toLowerCase().contains(query.toLowerCase()) ?? false;
+            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ?? false;
         return customerNameMatches ||
             mobileNumberMatches ||
             complainNumberMatches;

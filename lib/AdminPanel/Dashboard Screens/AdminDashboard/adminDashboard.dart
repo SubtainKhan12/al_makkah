@@ -53,7 +53,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
         ),
         // drawer: AdminDrawerUI(),
         body: RefreshIndicator(
-          onRefresh: ()async{
+          onRefresh: () async {
             get_JobStatus();
             get_JobStatus();
             post_DailyComparison();
@@ -77,7 +77,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
                               elevation: 10,
-                              shadowColor: Color(0xffC4E4FF),
+                              shadowColor: const Color(0xffC4E4FF),
                               child: Container(
                                 height: _height * 0.06,
                                 width: _width * 0.48,
@@ -97,26 +97,25 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     ),
                                     Container(
                                       width: _width * 0.22,
-                                      child: Text(
+                                      child: const Text(
                                         'UnAssigned',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Color(0xffEEEEEE),
                                       thickness: 1,
                                     ),
                                     Container(
-                                      width: _width* 0.177,
-
+                                      width: _width * 0.177,
                                       child: Text(
                                         jobStatusList[index]
                                             .unassigned
                                             .toString(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
@@ -133,7 +132,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
                               elevation: 10,
-                              shadowColor: Color(0xffC4E4FF),
+                              shadowColor: const Color(0xffC4E4FF),
                               child: Container(
                                 height: _height * 0.06,
                                 width: _width * 0.4,
@@ -153,23 +152,23 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     ),
                                     Container(
                                       width: _width * 0.15,
-                                      child: Text(
+                                      child: const Text(
                                         'Pending',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Color(0xffEEEEEE),
                                       thickness: 1,
                                     ),
                                     Container(
-                                      width: _width* 0.177,
+                                      width: _width * 0.177,
                                       child: Text(
                                         jobStatusList[index].pending.toString(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
@@ -194,7 +193,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
                               elevation: 10,
-                              shadowColor: Color(0xffC4E4FF),
+                              shadowColor: const Color(0xffC4E4FF),
                               child: Container(
                                 height: _height * 0.06,
                                 width: _width * 0.48,
@@ -214,23 +213,25 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     ),
                                     Container(
                                       width: _width * 0.22,
-                                      child: Text(
+                                      child: const Text(
                                         'Installed',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Color(0xffEEEEEE),
                                       thickness: 1,
                                     ),
                                     Container(
-                                      width: _width* 0.177,
+                                      width: _width * 0.177,
                                       child: Text(
-                                        jobStatusList[index].installed.toString(),
+                                        jobStatusList[index]
+                                            .installed
+                                            .toString(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
@@ -247,7 +248,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
                               elevation: 10,
-                              shadowColor: Color(0xffC4E4FF),
+                              shadowColor: const Color(0xffC4E4FF),
                               child: Container(
                                 height: _height * 0.06,
                                 width: _width * 0.4,
@@ -267,23 +268,23 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     ),
                                     Container(
                                       width: _width * 0.15,
-                                      child: Text(
+                                      child: const Text(
                                         'Closed',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 14),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Color(0xffEEEEEE),
                                       thickness: 1,
                                     ),
                                     Container(
-                                      width: _width* 0.177,
+                                      width: _width * 0.177,
                                       child: Text(
                                         jobStatusList[index].closed.toString(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
@@ -310,7 +311,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           child: Material(
                             borderRadius: BorderRadius.circular(5),
                             elevation: 10,
-                            shadowColor: Color(0xffC4E4FF),
+                            shadowColor: const Color(0xffC4E4FF),
                             child: Container(
                               height: _height * 0.06,
                               width: _width * 0.48,
@@ -330,24 +331,23 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                   ),
                                   Container(
                                     width: _width * 0.22,
-                                    child: Text(
+                                    child: const Text(
                                       'Canceled',
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14),
                                     ),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     color: Color(0xffEEEEEE),
                                     thickness: 1,
                                   ),
                                   Container(
-                                    width: _width* 0.177,
-
+                                    width: _width * 0.177,
                                     child: Text(
                                       jobStatusList[index].cancelled.toString(),
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20),
                                     ),
@@ -361,12 +361,19 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                       SizedBox(
                         height: _height * 0.02,
                       ),
-                      Text('  4 Days Info:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,fontStyle: FontStyle.italic,color: ColorsUtils.redColor),),
+                      Text(
+                        '  4 Days Info:',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.italic,
+                            color: ColorsUtils.redColor),
+                      ),
                       ListView.builder(
                         itemCount: dailyComparisonList.length,
                         shrinkWrap: true,
                         // Allow the ListView to shrink to fit its children
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         // Disable scrolling for the inner ListView
                         itemBuilder: (context, index) {
                           return Card(
@@ -376,23 +383,19 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                               width: _width * 1,
                               decoration: BoxDecoration(
                                   gradient: LinearGradient(colors: [
-                                    ColorsUtils.whiteColor,
-                                    ColorsUtils.baigeColor,
-                                  ])
-                              ),
+                                ColorsUtils.whiteColor,
+                                ColorsUtils.baigeColor,
+                              ])),
                               child: Row(
                                 children: [
                                   Container(
                                     width: _width * 0.15,
                                     child: Text(
-                                      '   ${dailyComparisonList[index]
-                                          .date
-                                          .toString()
-                                          .trim()}',
+                                      '   ${dailyComparisonList[index].date.toString().trim()}',
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     color: Colors.white,
                                   ),
                                   Container(
@@ -404,28 +407,29 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                           .trim(),
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16),
                                     ),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     color: Colors.white,
                                   ),
                                   Container(
                                     width: _width * 0.1,
-
                                     child: Text(
                                       dailyComparisonList[index]
                                           .jobs
                                           .toString()
                                           .trim(),
                                       textAlign: TextAlign.center,
-
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
-
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
                                     ),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     color: Colors.white,
                                   ),
                                   Container(
@@ -437,25 +441,26 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                           .trim(),
                                       textAlign: TextAlign.center,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
                                     ),
                                   ),
-                                  VerticalDivider(
+                                  const VerticalDivider(
                                     color: Colors.white,
                                   ),
                                   Container(
                                     width: _width * 0.1,
-
                                     child: Text(
                                       dailyComparisonList[index]
                                           .installed
                                           .toString()
                                           .trim(),
                                       textAlign: TextAlign.center,
-
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
-
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
                                     ),
                                   ),
                                 ],
@@ -464,16 +469,23 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           );
                         },
                       ),
-                      Text('  Technician info:',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,fontStyle: FontStyle.italic, color: ColorsUtils.redColor),),
+                      Text(
+                        '  Technician info:',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            fontStyle: FontStyle.italic,
+                            color: ColorsUtils.redColor),
+                      ),
                       ListView.builder(
                         itemCount: technicianComparisonList.length,
                         shrinkWrap: true,
                         // Allow the ListView to shrink to fit its children
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         // Disable scrolling for the inner ListView
                         itemBuilder: (context, index) {
                           return InkWell(
-                            onTap: (){
+                            onTap: () {
                               showModalBottomSheet(
                                 context: context,
                                 isScrollControlled: true,
@@ -483,29 +495,24 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                               );
                             },
                             child: Card(
-
                               child: Container(
                                 height: _height * 0.05,
                                 width: _width * 1,
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(colors: [
-                                      ColorsUtils.whiteColor,
-                                      ColorsUtils.baigeColor,
-                                    ])
-                                ),
+                                  ColorsUtils.whiteColor,
+                                  ColorsUtils.baigeColor,
+                                ])),
                                 child: Row(
                                   children: [
                                     Container(
                                       width: _width * 0.47,
                                       child: Text(
-                                        '   ${technicianComparisonList[index]
-                                            .name
-                                            .toString()
-                                            .trim()}',
+                                        '   ${technicianComparisonList[index].name.toString().trim()}',
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Colors.white,
                                     ),
                                     Container(
@@ -517,28 +524,29 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                             .trim(),
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Colors.white,
                                     ),
                                     Container(
                                       width: _width * 0.1,
-
                                       child: Text(
                                         technicianComparisonList[index]
                                             .pending
                                             .toString()
                                             .trim(),
                                         textAlign: TextAlign.center,
-
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
-
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
                                       ),
                                     ),
-                                    VerticalDivider(
+                                    const VerticalDivider(
                                       color: Colors.white,
                                     ),
                                     Container(
@@ -550,7 +558,9 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                             .trim(),
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
                                       ),
                                     ),
                                   ],
@@ -566,7 +576,9 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
               }),
         ));
   }
-  Widget _buildBottomSheet(BuildContext context, TechnicianComparisonModel model) {
+
+  Widget _buildBottomSheet(
+      BuildContext context, TechnicianComparisonModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -621,8 +633,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                         const SizedBox(height: 8),
                         const Divider(),
                         InkWell(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: const ListTile(
                             leading: Icon(Icons.pending),
                             title: Text("Pending Complains"),
@@ -630,8 +641,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {
-                          },
+                          onTap: () {},
                           child: const ListTile(
                             leading: Icon(Icons.input),
                             title: Text("Installed Complains"),
@@ -673,18 +683,18 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
       setState(() {});
     } else {}
   }
-  Future post_DailyComparison()async{
-    var response = await http.post(Uri.parse(DailyComparison),body: {
+
+  Future post_DailyComparison() async {
+    var response = await http.post(Uri.parse(DailyComparison), body: {
       'FDayNum': '4',
     });
     var result = jsonDecode(response.body);
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       dailyComparisonList.clear();
-      for(Map i in result){
+      for (Map i in result) {
         dailyComparisonList.add(DailyComparisonModel.fromJson(i));
       }
-      setState(() {
-      });
+      setState(() {});
     }
   }
 }

@@ -466,13 +466,16 @@ class _LoginUIState extends State<LoginUI> {
           _emailController.clear();
           _passwordController.clear();
           Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
+          Navigator.pop(context);
         }
       } else {
         Snackbar.showSnackBar(context, 'Login Failed', Colors.red);
+        Navigator.pop(context);
       }
     } catch (e) {
       // Handle network or JSON parsing errors
       Snackbar.showSnackBar(context, 'An error occurred. Please try again.', Colors.red);
+      Navigator.pop(context);
     }
   }
 

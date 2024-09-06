@@ -9,7 +9,7 @@ import '../../../../../Models/GetComplain/GetComplainModel.dart';
 import '../../../../../Utilities/Colors/colors.dart';
 
 class InstalledVisitFormUI extends StatefulWidget {
-  GetComplainModel getComplainModel;
+  JobStatusModel getComplainModel;
   InstalledVisitFormUI({super.key, required this.getComplainModel});
 
   @override

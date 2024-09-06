@@ -1,14 +1,11 @@
 import 'dart:convert';
-
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../APIs/apis.dart';
 import '../../../LoginPages/loginscreen.dart';
-// import '../../../Models/InstallerStatus/InstallarStatusModel.dart';
+import '../../../Models/TechnicianStatus/TechnicianStatusModel.dart';
 import '../../../Utilities/Colors/colors.dart';
-import '../Assigned/assigned.dart';
 import '../Installed/installed.dart';
 import '../Pending/pending.dart';
 
@@ -20,33 +17,28 @@ class DashboardUI extends StatefulWidget {
 }
 
 class _DashboardUIState extends State<DashboardUI> {
-  // InstallarStatusModel? installerStatusList;
-  String? colCode;
+  List<TechnicianStatusModel> technicianStatusList = [];
+  String? technicianCode;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getLoginInfo();
+    getLoginInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-    var h = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var w = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Dashboard',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
-        backgroundColor: ColorsUtils.appcolor,
+        backgroundColor: ColorsUtils.baigeColor,
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           IconButton(
               onPressed: () {
@@ -58,199 +50,222 @@ class _DashboardUIState extends State<DashboardUI> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AssignedUI()));
-                  },
-                  child: Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(5),
-                    // surfaceTintColor: Colors.blue,
-                    shadowColor: Colors.white,
-                    child: Container(
-                      height: h * 0.15,
-                      width: w * 0.3,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: h * 0.05,
-                            decoration: BoxDecoration(
-                                color: ColorsUtils.lightblueColor,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5)),
-                                border: Border.all(
-                                    color: ColorsUtils.greyColor)),
-                            child: Center(
-                              child: Text(
-                                'Assigned',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorsUtils.whiteColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
+        child: RefreshIndicator(
+          onRefresh: post_TechnicianStatus,
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                    itemCount: technicianStatusList.length,
+                    itemBuilder: (context, index){
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => PendingUI()));
+                        },
+                        child: Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(5),
+                          // surfaceTintColor: Colors.blue,
+                          shadowColor: Colors.white,
+                          child: Container(
+                            height: h * 0.15,
+                            width: w * 0.3,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: h * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: ColorsUtils.baigeColor,
+
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5)),
+                                      border:
+                                      Border.all(color: ColorsUtils.greyColor)),
+                                  child: Center(
+                                    child: Text(
+                                      'Pending',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: ColorsUtils.whiteColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: h * 0.1,
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(
+                                          bottomRight: Radius.circular(5),
+                                          bottomLeft: Radius.circular(5)),
+                                      border:
+                                      Border.all(color: ColorsUtils.greyColor)),
+                                  child: Center(
+                                      child: Text(
+                                        technicianStatusList[index]
+                                            .pending
+                                            .toString()
+                                            .trim() ??
+                                            '0',
+                                        style: TextStyle(
+                                            fontSize: 53,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey.shade400),
+                                      )),
+                                )
+                              ],
                             ),
                           ),
-                          Container(
-                            height: h * 0.1,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(5),
-                                    bottomLeft: Radius.circular(5)),
-                                border: Border.all(
-                                    color: ColorsUtils.greyColor)),
-                            child: Center(
-                                child: Text(
-                                  // installerStatusList?.assigned.toString() ??
-                                      '0',
-                                  style:  TextStyle(
-                                      fontSize: 53,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey.shade400),
-                                )),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => InstalledUI()));
-                  },
-                  child: Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(5),
-                    // surfaceTintColor: Colors.blue,
-                    shadowColor: Colors.white,
-                    child: Container(
-                      height: h * 0.15,
-                      width: w * 0.3,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: h * 0.05,
-                            decoration: BoxDecoration(
-                                color: ColorsUtils.lightblueColor,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5)),
-                                border: Border.all(
-                                    color: ColorsUtils.greyColor)),
-                            child: Center(
-                              child: Text(
-                                'Installed',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorsUtils.whiteColor,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => InstalledUI()));
+                        },
+                        child: Material(
+                          elevation: 5,
+                          borderRadius: BorderRadius.circular(5),
+                          // surfaceTintColor: Colors.blue,
+                          shadowColor: Colors.white,
+                          child: Container(
+                            height: h * 0.15,
+                            width: w * 0.3,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: h * 0.05,
+                                  decoration: BoxDecoration(
+                                      color: ColorsUtils.baigeColor,
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5)),
+                                      border:
+                                      Border.all(color: ColorsUtils.greyColor)),
+                                  child: Center(
+                                    child: Text(
+                                      'Installed',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: ColorsUtils.whiteColor,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: h * 0.1,
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(
+                                          bottomRight: Radius.circular(5),
+                                          bottomLeft: Radius.circular(5)),
+                                      border:
+                                      Border.all(color: ColorsUtils.greyColor)),
+                                  child: Center(
+                                      child: Text(
+                                        technicianStatusList[index]
+                                            .installed
+                                            .toString()
+                                            .trim() ??
+                                            '0',
+                                        style: TextStyle(
+                                            fontSize: 53,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey.shade400),
+                                      )),
+                                )
+                              ],
                             ),
                           ),
-                          Container(
-                            height: h * 0.1,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(5),
-                                    bottomLeft: Radius.circular(5)),
-                                border: Border.all(
-                                    color: ColorsUtils.greyColor)),
-                            child: Center(
-                                child: Text(
-                                  // installerStatusList?.installed.toString() ??
-                                      '0',
-                                  style: TextStyle(
-                                      fontSize: 53,
-                                      fontWeight: FontWeight.w500,
-                                  color: Colors.grey.shade400),
-                                )),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PendingUI()));
-                  },
-                  child: Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(5),
-                    // surfaceTintColor: Colors.blue,
-                    shadowColor: Colors.white,
-                    child: Container(
-                      height: h * 0.15,
-                      width: w * 0.3,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: h * 0.05,
-                            decoration: BoxDecoration(
-                                color: ColorsUtils.lightblueColor,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5)),
-                                border: Border.all(color: ColorsUtils.greyColor)),
-                            child: Center(
-                              child: Text(
-                                'Pending',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorsUtils.whiteColor,
-                                    fontWeight: FontWeight.bold),
+                      Material(
+                        elevation: 5,
+                        borderRadius: BorderRadius.circular(5),
+                        // surfaceTintColor: Colors.blue,
+                        shadowColor: Colors.white,
+                        child: Container(
+                          height: h * 0.15,
+                          width: w * 0.3,
+                          child: Column(
+                            children: [
+                              Container(
+                                height: h * 0.05,
+                                decoration: BoxDecoration(
+                                    color: ColorsUtils.baigeColor,
+
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(5),
+                                        topRight: Radius.circular(5)),
+                                    border:
+                                    Border.all(color: ColorsUtils.greyColor)),
+                                child: Center(
+                                  child: Text(
+                                    'Closed',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: ColorsUtils.whiteColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Container(
+                                height: h * 0.1,
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        bottomRight: Radius.circular(5),
+                                        bottomLeft: Radius.circular(5)),
+                                    border:
+                                    Border.all(color: ColorsUtils.greyColor)),
+                                child: Center(
+                                    child: Text(
+                                      technicianStatusList[index]
+                                          .closed
+                                          .toString()
+                                          .trim() ??
+                                          '0',
+                                      style: TextStyle(
+                                          fontSize: 53,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey.shade400),
+                                    )),
+                              )
+                            ],
                           ),
-                          Container(
-                            height: h * 0.1,
-                            decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                    bottomRight: Radius.circular(5),
-                                    bottomLeft: Radius.circular(5)),
-                                border: Border.all(color: ColorsUtils.greyColor)),
-                            child: Center(
-                                child: Text(
-                                  // installerStatusList?.pending.toString() ??
-                                      '0',
-                                  style: TextStyle(fontSize: 53, fontWeight: FontWeight.w500,color:Colors.grey.shade400),
-                                )),
-                          )
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
+                    ],
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  // Future post_InstallarStatus() async {
-  //   var response = await http.post(Uri.parse(InstallarStatus), body: {
-  //     'FIntCod': colCode.toString(),
-  //   });
-  //   var result = jsonDecode(response.body);
-  //   setState(() {
-  //     installerStatusList = InstallarStatusModel.fromJson(result);
-  //   });
-  // }
-  //
-  // getLoginInfo() async {
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   colCode = sp.getString('colCode');
-  //   setState(() {});
-  //   post_InstallarStatus();
-  // }
+  Future post_TechnicianStatus() async {
+    var response = await http.post(Uri.parse(TechnicianStatus), body: {
+      'FTchCod': technicianCode.toString(),
+    });
+    var result = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      technicianStatusList.clear();
+      for (Map i in result) {
+        technicianStatusList.add(TechnicianStatusModel.fromJson(i));
+      }
+      setState(() {});
+    }
+  }
+
+  getLoginInfo() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    technicianCode = sp.getString('technicianCode');
+    setState(() {});
+    post_TechnicianStatus();
+  }
 }

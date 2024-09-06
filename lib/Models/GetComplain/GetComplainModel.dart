@@ -24,8 +24,8 @@
 /// Remarks : "GOD                                     "
 /// Amount : "2000.00"
 
-class GetComplainModel {
-  GetComplainModel({
+class JobStatusModel {
+  JobStatusModel({
       String? comp, 
       String? date, 
       String? mobile, 
@@ -78,7 +78,7 @@ class GetComplainModel {
     _amount = amount;
 }
 
-  GetComplainModel.fromJson(dynamic json) {
+  JobStatusModel.fromJson(dynamic json) {
     _comp = json['Comp#'];
     _date = json['Date'];
     _mobile = json['Mobile'];
@@ -130,7 +130,7 @@ class GetComplainModel {
   String? _status;
   String? _remarks;
   String? _amount;
-GetComplainModel copyWith({  String? comp,
+JobStatusModel copyWith({  String? comp,
   String? date,
   String? mobile,
   String? customer,
@@ -155,7 +155,7 @@ GetComplainModel copyWith({  String? comp,
   String? status,
   String? remarks,
   String? amount,
-}) => GetComplainModel(  comp: comp ?? _comp,
+}) => JobStatusModel(  comp: comp ?? _comp,
   date: date ?? _date,
   mobile: mobile ?? _mobile,
   customer: customer ?? _customer,

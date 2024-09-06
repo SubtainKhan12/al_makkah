@@ -7,15 +7,15 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../APIs/apis.dart';
-import '../../../../../Models/GetComplain/GetComplainModel.dart';
+import '../../../../../Models/GetJobInfo/JobInfoModel.dart';
 import '../../../../../Utilities/Colors/colors.dart';
 import '../../../../../Utilities/Loader/loader.dart';
 import '../../../../../Utilities/Snackbar/snackbar.dart';
 
 class PendingVisitFormUI extends StatefulWidget {
-  GetComplainModel getComplainModel;
+  JobInfoModel getJobInfo;
 
-  PendingVisitFormUI({super.key, required this.getComplainModel});
+  PendingVisitFormUI({super.key, required this.getJobInfo});
 
   @override
   State<PendingVisitFormUI> createState() => _PendingVisitFormUIState();
@@ -25,11 +25,13 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
   TextEditingController _serialController = TextEditingController();
   TextEditingController _itemController = TextEditingController();
   TextEditingController _remarkController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
   DateTime? _dateTime;
   var cdate = DateFormat("dd-MM-yyyy").format(DateTime.now());
+  DateTime cdate1 = DateTime.now();
 
   // DateTime selectedInitialDate = DateTime.now();
-  String? status = 'Pending';
+  String? status = 'Not Installed';
   File? _image;
 
   @override
@@ -41,21 +43,16 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var _width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Visit Form',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
-        backgroundColor: ColorsUtils.appcolor,
+        backgroundColor: ColorsUtils.baigeColor,
         iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
       ),
       body: SingleChildScrollView(
@@ -74,45 +71,42 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                           width: _width * 0.23,
                           child: const Text(
                             'Complain No',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           )),
                       Container(
                         width: _width * 0.02,
                         child: const Text(
                           ':',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
                       Container(
-                        // width: _width * 0.25,
-                          child: Text(widget.getComplainModel
-                              .comp
-                              .toString()
-                              .trim(), style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold,),))
+                          // width: _width * 0.25,
+                          child: Text(
+                        widget.getJobInfo.tjobnum.toString().trim(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ))
                     ],
                   ),
                 ),
-                InkWell(
-                  // onTap: (){_intSelectDate(context,setState);},
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 8),
-                      const Text('Date: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(
-                        cdate.toString(),
-                        // DateFormat('dd-MM-yyyy').format(selectedInitialDate),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    const Text('Date: ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      widget.getJobInfo.tjobdat.toString().trim(),
+                      // DateFormat('dd-MM-yyyy').format(selectedInitialDate),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
-                      // const Icon(Icons.calendar_today, color: Colors.green),
-                    ],
-                  ),
+                    ),
+                    // const Icon(Icons.calendar_today, color: Colors.green),
+                  ],
                 ),
               ],
             ),
@@ -132,35 +126,29 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                       )),
                   child: Column(
                     children: [
-
                       Container(
                         child: Row(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                                 width: _width * 0.23,
                                 child: const Text(
                                   'Customer',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Container(
                               width: _width * 0.02,
                               child: const Text(
                                 ':',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                             Container(
-                              // width: _width * 0.25,
+                                // width: _width * 0.25,
                                 child: Flexible(
-                                  child: Text(widget.getComplainModel
-                                      .customer
-                                      .toString()
-                                      .trim()),
-                                ))
+                              child: Text(
+                                  widget.getJobInfo.tcstnam.toString().trim()),
+                            ))
                           ],
                         ),
                       ),
@@ -171,21 +159,18 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                                 width: _width * 0.23,
                                 child: const Text(
                                   'Address',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Container(
                               width: _width * 0.02,
                               child: const Text(
                                 ':',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                             Container(
-                              // width: _width * 0.25,
-                                child: Text(widget.getComplainModel
-                                    .address1
+                                // width: _width * 0.25,
+                                child: Text(widget.getJobInfo.tadd001
                                     .toString()
                                     .trim())),
                           ],
@@ -198,21 +183,18 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                                 width: _width * 0.23,
                                 child: const Text(
                                   '',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Container(
                               width: _width * 0.02,
                               child: const Text(
                                 ':',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                             Container(
-                              // width: _width * 0.25,
-                                child: Text(widget.getComplainModel
-                                    .address2
+                                // width: _width * 0.25,
+                                child: Text(widget.getJobInfo.tadd002
                                     .toString()
                                     .trim()))
                           ],
@@ -225,28 +207,23 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                                 width: _width * 0.23,
                                 child: const Text(
                                   'Mobile No',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                             Container(
                               width: _width * 0.02,
                               child: const Text(
                                 ':',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                             Container(
-                              // width: _width * 0.25,
-                                child: Text(widget.getComplainModel
-                                    .mobile
+                                // width: _width * 0.25,
+                                child: Text(widget.getJobInfo.tmobnum
                                     .toString()
                                     .trim()))
                           ],
                         ),
                       ),
-
-
                     ],
                   )),
             ),
@@ -254,16 +231,36 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
               height: 10,
             ),
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 0.3,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 16,
+              width: MediaQuery.of(context).size.width / 0.3,
+              height: MediaQuery.of(context).size.height / 16,
               child: TextField(
                 readOnly: true,
+                controller: _dateController,
+                decoration: InputDecoration(
+                  labelText: "Visit Date",
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        _intSelectDate(context, setState);
+                      },
+                      icon: Icon(
+                        Icons.calendar_month,
+                        color: Colors.blue,
+                      )),
+                  labelStyle: TextStyle(color: ColorsUtils.appcolor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 0.3,
+              height: MediaQuery.of(context).size.height / 16,
+              child: TextField(
+                // readOnly: true,
                 controller: _itemController,
                 decoration: InputDecoration(
                   labelText: "Item",
@@ -278,17 +275,10 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
               height: 10,
             ),
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 0.3,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 16,
+              width: MediaQuery.of(context).size.width / 0.3,
+              height: MediaQuery.of(context).size.height / 16,
               child: TextField(
                 controller: _serialController,
-                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Serial No",
                   border: OutlineInputBorder(
@@ -301,14 +291,8 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
               height: 10,
             ),
             Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 0.3,
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height / 16,
+              width: MediaQuery.of(context).size.width / 0.3,
+              height: MediaQuery.of(context).size.height / 16,
               child: DropdownButtonFormField<String>(
                 value: status,
                 onChanged: (newValue) {
@@ -317,7 +301,7 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                   });
                 },
                 items: <String>[
-                  'Pending',
+                  'Not Installed',
                   'Installed',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -367,14 +351,18 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                     border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(8)),
                 child: _image == null
-                    ? const Center(child: Icon(Icons.image_outlined, size: 50,))
+                    ? const Center(
+                        child: Icon(
+                        Icons.image_outlined,
+                        size: 50,
+                      ))
                     : ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.file(
-                    _image!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(
+                          _image!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(
@@ -387,8 +375,9 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
               height: _height / 16,
               width: _width / 0.3, // Set the height
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5))),
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5))),
                 onPressed: () {
                   post_SaveVisit();
                   CircularIndicator.showLoader(context);
@@ -406,14 +395,8 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
   }
 
   void _showImageSourceDialog() {
-    var _height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var _width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -460,37 +443,35 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
     }
   }
 
-
   setComplainData() {
-    _itemController.text =
-        widget.getComplainModel.item.toString().trim() ?? '0';
+    String formattedDate = DateFormat("dd-MM-yyyy").format(cdate1);
+    _itemController.text = widget.getJobInfo.titmdsc.toString().trim() ?? '0';
+    _dateController.text = formattedDate;
   }
 
-
-  // Future<void> _intSelectDate(
-  //     BuildContext context, StateSetter setState) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     helpText: 'From Date',
-  //     initialDate: cdate,
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null && picked != cdate) {
-  //     setState(() {
-  //       cdate = picked;
-  //     });
-  //   }
-  // }
+  Future<void> _intSelectDate(
+      BuildContext context, StateSetter setState) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: cdate1,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != cdate1) {
+      setState(() {
+        cdate1 = picked;
+        _dateController.text = DateFormat("dd-MM-yyyy").format(cdate1);
+      });
+    }
+  }
 
   Future post_SaveVisit() async {
-    var request = http.MultipartRequest('POST',
-        Uri.parse(SaveVisit));
-    request.fields['FTrnNum'] = widget.getComplainModel.comp.toString();
-    request.fields['FCmpSts'] = status.toString();
+    var request = http.MultipartRequest('POST', Uri.parse(SaveVisit));
+    request.fields['FJobNum'] = widget.getJobInfo.tjobnum.toString();
+    request.fields['FJobSts'] = status.toString();
     request.fields['FItmSer'] = _serialController.text;
     request.fields['FVstRem'] = _remarkController.text;
-    request.fields['FVstDat'] = cdate.toString();
+    request.fields['FVstDat'] = cdate1.toString();
 
     if (_image != null) {
       var picture = await http.MultipartFile.fromPath('VstImg', _image!.path);

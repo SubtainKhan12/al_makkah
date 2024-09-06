@@ -2,53 +2,54 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import '../../../../APIs/apis.dart';
 import '../../../../Models/GetComplain/GetComplainModel.dart';
-import '../../../../Models/Pending/PendingModel.dart';
+import '../../../../Models/GetJobInfo/JobInfoModel.dart';
+import '../../../../Models/Pending/TechnicianPendingJobsModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
-import '../../../../Utilities/Snackbar/snackbar.dart';
 import 'VisitForm/pendingVisitFormUi.dart';
 
 class PendingVisitScreen extends StatefulWidget {
-  PendingModel pendingModel;
+  TechnicianPendingJobsModel technicalPendingModel;
 
-  PendingVisitScreen({super.key, required this.pendingModel});
+  PendingVisitScreen({super.key, required this.technicalPendingModel});
 
   @override
   State<PendingVisitScreen> createState() => _PendingVisitScreenState();
 }
 
 class _PendingVisitScreenState extends State<PendingVisitScreen> {
-  List<GetComplainModel> getComplainList = [];
+  List<JobInfoModel> JobInfoList = [];
   bool isLoading = true;
   bool isDataEmpty = false;
 
   @override
   void initState() {
     super.initState();
-    Post_Complain();
+    Post_GetJobInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool areAllVisitsCompleted = getComplainList.isNotEmpty &&
-        getComplainList[0].date1 != null &&
-        getComplainList[0].date2 != null &&
-        getComplainList[0].date3 != null &&
-        getComplainList[0].date4 != null &&
-        getComplainList[0].remarks1 != null &&
-        getComplainList[0].remarks2 != null &&
-        getComplainList[0].remarks3 != null &&
-        getComplainList[0].remarks4 != null;
+    bool areAllVisitsCompleted = JobInfoList.isNotEmpty &&
+        JobInfoList[0].tdat001 != null &&
+        JobInfoList[0].tdat002 != null &&
+        JobInfoList[0].tdat003 != null &&
+        JobInfoList[0].tdat004 != null &&
+        JobInfoList[0].trem001 != null &&
+        JobInfoList[0].trem002 != null &&
+        JobInfoList[0].trem003 != null &&
+        JobInfoList[0].trem004 != null;
     return RefreshIndicator(
-      onRefresh: Post_Complain,
+      onRefresh: Post_GetJobInfo,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
             'Visit',
             style: TextStyle(color: ColorsUtils.whiteColor),
           ),
-          backgroundColor: ColorsUtils.appcolor,
+          backgroundColor: ColorsUtils.baigeColor,
           iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
         ),
         floatingActionButton: FloatingActionButton(
@@ -59,8 +60,8 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) => PendingVisitFormUI(
-                                getComplainModel: getComplainList[0],
-                              ))).then((value) => Post_Complain());
+                                getJobInfo: JobInfoList[0],
+                              ))).then((value) => Post_GetJobInfo());
                 },
           child: Icon(Icons.add),
         ),
@@ -72,14 +73,14 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15.0, vertical: 10),
                     child: ListView.builder(
-                      itemCount: getComplainList.length,
+                      itemCount: JobInfoList.length,
                       itemBuilder: (context, index) {
                         return Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (getComplainList[index].date1 != null &&
-                                  getComplainList[index].remarks1 != null)
+                              if (JobInfoList[index].tdat001 != null &&
+                                  JobInfoList[index].trem001 != null)
                                 SizedBox(
                                   width: double.infinity,
                                   child: Card(
@@ -91,17 +92,18 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            getComplainList[index]
-                                                .date1
+                                            DateFormat('dd-MM-yyyy').format(DateTime.parse( JobInfoList[index]
+                                                .tdat001
                                                 .toString()
-                                                .trim(),
+                                                .trim(),)),
+
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14),
                                           ),
                                           Text(
-                                            getComplainList[index]
-                                                .remarks1
+                                            JobInfoList[index]
+                                                .trem001
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(fontSize: 12),
@@ -111,8 +113,8 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                     ),
                                   ),
                                 ),
-                              if (getComplainList[index].date2 != null &&
-                                  getComplainList[index].remarks2 != null)
+                              if (JobInfoList[index].tdat002 != null &&
+                                  JobInfoList[index].trem002 != null)
                                 SizedBox(
                                   width: double.infinity,
                                   child: Card(
@@ -124,17 +126,17 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            getComplainList[index]
-                                                .date2
+                                            DateFormat('dd-MM-yyyy').format(DateTime.parse( JobInfoList[index]
+                                                .tdat002
                                                 .toString()
-                                                .trim(),
+                                                .trim(),)),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14),
                                           ),
                                           Text(
-                                            getComplainList[index]
-                                                .remarks2
+                                            JobInfoList[index]
+                                                .trem002
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(fontSize: 12),
@@ -144,8 +146,8 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                     ),
                                   ),
                                 ),
-                              if (getComplainList[index].date3 != null &&
-                                  getComplainList[index].remarks3 != null)
+                              if (JobInfoList[index].tdat003 != null &&
+                                  JobInfoList[index].trem003 != null)
                                 SizedBox(
                                   width: double.infinity,
                                   child: Card(
@@ -157,17 +159,17 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            getComplainList[index]
-                                                .date3
+                                            DateFormat('dd-MM-yyyy').format(DateTime.parse( JobInfoList[index]
+                                                .tdat003
                                                 .toString()
-                                                .trim(),
+                                                .trim(),)),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14),
                                           ),
                                           Text(
-                                            getComplainList[index]
-                                                .remarks3
+                                            JobInfoList[index]
+                                                .trem003
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(fontSize: 12),
@@ -177,8 +179,8 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                     ),
                                   ),
                                 ),
-                              if (getComplainList[index].date4 != null &&
-                                  getComplainList[index].remarks4 != null)
+                              if (JobInfoList[index].tdat004 != null &&
+                                  JobInfoList[index].trem004 != null)
                                 SizedBox(
                                   width: double.infinity,
                                   child: Card(
@@ -190,17 +192,17 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            getComplainList[index]
-                                                .date4
+                                            DateFormat('dd-MM-yyyy').format(DateTime.parse( JobInfoList[index]
+                                                .tdat004
                                                 .toString()
-                                                .trim(),
+                                                .trim(),)),
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 14),
                                           ),
                                           Text(
-                                            getComplainList[index]
-                                                .remarks4
+                                            JobInfoList[index]
+                                                .trem004
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(fontSize: 12),
@@ -220,13 +222,13 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
     );
   }
 
-  Future Post_Complain() async {
-    var response = await http.post(Uri.parse(GetComplain), body: {
-      'FCmpNum': widget.pendingModel.cmp.toString(),
+  Future Post_GetJobInfo() async {
+    var response = await http.post(Uri.parse(GetJobInfo), body: {
+      'FJobNum': widget.technicalPendingModel.tjobnum.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      getComplainList.clear();
+      JobInfoList.clear();
       if (result.isEmpty) {
         setState(() {
           isLoading = false;
@@ -234,11 +236,11 @@ class _PendingVisitScreenState extends State<PendingVisitScreen> {
         });
       } else {
         for (Map i in result) {
-          getComplainList.add(GetComplainModel.fromJson(i));
+          JobInfoList.add(JobInfoModel.fromJson(i));
         }
         setState(() {
           isLoading = false;
-          isDataEmpty = getComplainList.isEmpty;
+          isDataEmpty = JobInfoList.isEmpty;
         });
       }
     } else {

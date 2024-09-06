@@ -1,3 +1,4 @@
+import 'package:al_makkah/Utilities/Colors/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'LoginPages/loginscreen.dart';
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
+        colorScheme: ColorScheme.fromSeed(seedColor: ColorsUtils.baigeColor),
         useMaterial3: true,
       ),
       home: const LoginUI(),

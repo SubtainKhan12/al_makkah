@@ -1,15 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:translator/translator.dart';
 import '../../../../APIs/apis.dart';
-import '../../../../Models/GetComplain/GetComplainModel.dart';
-import '../../../../Models/Pending/PendingModel.dart';
+
+import '../../../../Models/GetJobInfo/JobInfoModel.dart';
+import '../../../../Models/JobStatus/JobStatusModel.dart';
+import '../../../../Models/Pending/TechnicianPendingJobsModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
 
 class PendingCustomerDetail extends StatefulWidget {
-  PendingModel pendingModel;
+  TechnicianPendingJobsModel pendingModel;
 
   PendingCustomerDetail({super.key, required this.pendingModel});
 
@@ -18,17 +21,15 @@ class PendingCustomerDetail extends StatefulWidget {
 }
 
 class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
-  List<GetComplainModel> getComplainList = [];
+  List<JobInfoModel> jobsInfoList = [];
   final translator = GoogleTranslator();
   bool _translatetext = false;
-
-
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Post_Complain();
+    Post_GetJobInfo();
   }
 
   @override
@@ -37,29 +38,69 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Detail',
-          style: TextStyle(color: ColorsUtils.whiteColor),
-        ),
-        backgroundColor: ColorsUtils.appcolor,
-        iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
-        actions: [
-        Switch(
-        value: _translatetext,
-        onChanged: (value) {
-          setState(() {
-            _translatetext = value;
-          });
-        },
-      ),
-      ]
-      ),
-      body: getComplainList.isEmpty
+          title: Text(
+            'Detail',
+            style: TextStyle(color: ColorsUtils.whiteColor),
+          ),
+          backgroundColor: ColorsUtils.baigeColor,
+          iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _translatetext = false;
+                      });
+                    },
+                    child: Text(
+                      'Eng',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: !_translatetext ? Colors.yellow : Colors.white,
+                        fontWeight: !_translatetext
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text("|",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: ColorsUtils.whiteColor,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _translatetext = true;
+                      });
+                    },
+                    child: Text(
+                      'اردو',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: _translatetext ? Colors.yellow : Colors.white,
+                        fontWeight: _translatetext
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+      body: jobsInfoList.isEmpty
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-              itemCount: getComplainList.length,
+              itemCount: jobsInfoList.length,
               itemBuilder: (context, index) {
                 return SingleChildScrollView(
                   child: Padding(
@@ -79,8 +120,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       color: ColorsUtils.blackColor,
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
-                                  text: getComplainList[index]
-                                      .comp
+                                  text: jobsInfoList[index]
+                                      .tjobnum
                                       .toString()
                                       .trim(),
                                   style: TextStyle(
@@ -95,10 +136,13 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       color: ColorsUtils.blackColor,
                                       fontWeight: FontWeight.bold)),
                               TextSpan(
-                                  text: getComplainList[index]
-                                      .date
-                                      .toString()
-                                      .trim(),
+                                  text: DateFormat('dd-MM-yyyy')
+                                      .format(DateTime.parse(
+                                    jobsInfoList[index]
+                                        .tjobdat
+                                        .toString()
+                                        .trim(),
+                                  )),
                                   style:
                                       TextStyle(color: ColorsUtils.blackColor)),
                             ]))
@@ -143,8 +187,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         ),
                                         Container(
                                             // width: _width * 0.25,
-                                            child: Text(getComplainList[index]
-                                                .mobile
+                                            child: Text(jobsInfoList[index]
+                                                .tmobnum
                                                 .toString()
                                                 .trim()))
                                       ],
@@ -174,43 +218,52 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                             // width: _width * 0.25,
                                             child: Flexible(
                                           child: _translatetext == false
-                                              ? Text(getComplainList[index]
-                                                  .customer
+                                              ? Text(jobsInfoList[index]
+                                                  .tcstnam
                                                   .toString()
                                                   .trim())
                                               : FutureBuilder<String>(
-                                            future: translateTextToUrdu(
-                                                getComplainList[index]
-                                                    .customer
-                                                    .toString()
-                                                    .trim()),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                                return Text('isLoading....'); // Show a spinner while translating
-                                              } else if (snapshot.hasError) {
-                                                return Text(
-                                                  getComplainList[index]
-                                                      .customer
-                                                      .toString()
-                                                      .trim(),
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.bold),
-                                                );
-                                              } else {
-                                                return Text(
-                                                  snapshot.data ??
-                                                      getComplainList[index]
-                                                          .customer
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tcstnam
                                                           .toString()
-                                                          .trim(),
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.bold),
-                                                );
-                                              }
-                                            },
-                                          ),
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tcstnam
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tcstnam
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
                                         ))
                                       ],
                                     ),
@@ -238,43 +291,50 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                              child: _translatetext == false
-                                                  ? Text(getComplainList[index]
-                                                  .address1
+                                          child: _translatetext == false
+                                              ? Text(jobsInfoList[index]
+                                                  .tadd001
                                                   .toString()
                                                   .trim())
-                                                  : FutureBuilder<String>(
-                                                future: translateTextToUrdu(
-                                                    getComplainList[index]
-                                                        .address1
-                                                        .toString()
-                                                        .trim()),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                                    return Text('isLoading....'); // Show a spinner while translating
-                                                  } else if (snapshot.hasError) {
-                                                    return Text(
-                                                      getComplainList[index]
-                                                          .address1
+                                              : FutureBuilder<String>(
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tadd001
                                                           .toString()
-                                                          .trim(),
-                                                      style: TextStyle(
-                                                          fontSize: 15,),
-                                                    );
-                                                  } else {
-                                                    return Text(
-                                                      snapshot.data ??
-                                                          getComplainList[index]
-                                                              .address1
-                                                              .toString()
-                                                              .trim(),
-                                                      style: TextStyle(
-                                                          fontSize: 15,),
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ))
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tadd001
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tadd001
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                        ))
                                       ],
                                     ),
                                   ),
@@ -301,43 +361,50 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                              child: _translatetext == false
-                                                  ? Text(getComplainList[index]
-                                                  .address1
+                                          child: _translatetext == false
+                                              ? Text(jobsInfoList[index]
+                                                  .tadd002
                                                   .toString()
                                                   .trim())
-                                                  : FutureBuilder<String>(
-                                                future: translateTextToUrdu(
-                                                    getComplainList[index]
-                                                        .address2
-                                                        .toString()
-                                                        .trim()),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                                    return Text('isLoading....'); // Show a spinner while translating
-                                                  } else if (snapshot.hasError) {
-                                                    return Text(
-                                                      getComplainList[index]
-                                                          .address2
+                                              : FutureBuilder<String>(
+                                                  future: translateTextToUrdu(
+                                                      jobsInfoList[index]
+                                                          .tadd002
                                                           .toString()
-                                                          .trim(),
-                                                      style: TextStyle(
-                                                        fontSize: 15,),
-                                                    );
-                                                  } else {
-                                                    return Text(
-                                                      snapshot.data ??
-                                                          getComplainList[index]
-                                                              .address2
-                                                              .toString()
-                                                              .trim(),
-                                                      style: TextStyle(
-                                                        fontSize: 15,),
-                                                    );
-                                                  }
-                                                },
-                                              ),
-                                            ))
+                                                          .trim()),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Text(
+                                                          'isLoading....'); // Show a spinner while translating
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                        jobsInfoList[index]
+                                                            .tadd002
+                                                            .toString()
+                                                            .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return Text(
+                                                        snapshot.data ??
+                                                            jobsInfoList[index]
+                                                                .tadd002
+                                                                .toString()
+                                                                .trim(),
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                ),
+                                        ))
                                       ],
                                     ),
                                   ),
@@ -364,7 +431,7 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
+                                          child: Text(jobsInfoList[index]
                                               .city
                                               .toString()
                                               .trim()),
@@ -399,7 +466,7 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             width: _width * 0.18,
                                             child: const Text(
-                                              'Dealer',
+                                              'Company',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             )),
@@ -414,8 +481,39 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .dealer
+                                          child: Text(jobsInfoList[index]
+                                              .company
+                                              .toString()
+                                              .trim()),
+                                        ))
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                            width: _width * 0.18,
+                                            child: const Text(
+                                              'Category',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                        Container(
+                                          width: _width * 0.02,
+                                          child: const Text(
+                                            ':',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        Container(
+                                            // width: _width * 0.25,
+                                            child: Flexible(
+                                          child: Text(jobsInfoList[index]
+                                              .category
                                               .toString()
                                               .trim()),
                                         ))
@@ -445,8 +543,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .item
+                                          child: Text(jobsInfoList[index]
+                                              .titmdsc
                                               .toString()
                                               .trim()),
                                         )),
@@ -476,8 +574,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .serialNo
+                                          child: Text(jobsInfoList[index]
+                                              .titmser
                                               .toString()
                                               .trim()),
                                         ))
@@ -527,8 +625,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .installar
+                                          child: Text(jobsInfoList[index]
+                                              .technician
                                               .toString()
                                               .trim()),
                                         )),
@@ -558,11 +656,10 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                                child: Text(
-                                                    getComplainList[index]
-                                                        .installarMobile
-                                                        .toString()
-                                                        .trim()))),
+                                                child: Text(jobsInfoList[index]
+                                                    .mobile
+                                                    .toString()
+                                                    .trim()))),
                                       ],
                                     ),
                                   ),
@@ -589,8 +686,8 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                              .assignedOn
+                                          child: Text(jobsInfoList[index]
+                                              .tjobdat
                                               .toString()
                                               .trim()),
                                         ))
@@ -618,13 +715,13 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                             ),
                             child: Column(
                               children: [
-                                if (getComplainList[index]
-                                            .date1
+                                if (jobsInfoList[index]
+                                            .tdat001
                                             .toString()
                                             .trim() !=
                                         'null' ||
-                                    getComplainList[index]
-                                            .remarks1
+                                    jobsInfoList[index]
+                                            .trem001
                                             .toString()
                                             .trim() !=
                                         'null')
@@ -635,16 +732,19 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       Container(
                                         width: _width * 0.22,
                                         child: Text(
-                                          getComplainList[index]
-                                                      .date1
+                                          jobsInfoList[index]
+                                                      .tdat001
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .date1
-                                                  .toString()
-                                                  .trim(),
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat001
+                                                      .toString()
+                                                      .trim(),
+                                                )),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -660,27 +760,27 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          getComplainList[index]
-                                                      .remarks1
+                                          jobsInfoList[index]
+                                                      .trem001
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .remarks1
+                                              : jobsInfoList[index]
+                                                  .trem001
                                                   .toString()
                                                   .trim(),
                                         ),
                                       ),
                                     ],
                                   ),
-                                if (getComplainList[index]
-                                            .date2
+                                if (jobsInfoList[index]
+                                            .tdat002
                                             .toString()
                                             .trim() !=
                                         'null' ||
-                                    getComplainList[index]
-                                            .remarks2
+                                    jobsInfoList[index]
+                                            .trem002
                                             .toString()
                                             .trim() !=
                                         'null')
@@ -691,16 +791,19 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       Container(
                                         width: _width * 0.22,
                                         child: Text(
-                                          getComplainList[index]
-                                                      .date2
+                                          jobsInfoList[index]
+                                                      .tdat002
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .date2
-                                                  .toString()
-                                                  .trim(),
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat002
+                                                      .toString()
+                                                      .trim(),
+                                                )),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -715,27 +818,27 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          getComplainList[index]
-                                                      .remarks2
+                                          jobsInfoList[index]
+                                                      .trem002
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .remarks2
+                                              : jobsInfoList[index]
+                                                  .trem002
                                                   .toString()
                                                   .trim(),
                                         ),
                                       ),
                                     ],
                                   ),
-                                if (getComplainList[index]
-                                            .date3
+                                if (jobsInfoList[index]
+                                            .tdat003
                                             .toString()
                                             .trim() !=
                                         'null' ||
-                                    getComplainList[index]
-                                            .remarks3
+                                    jobsInfoList[index]
+                                            .trem003
                                             .toString()
                                             .trim() !=
                                         'null')
@@ -746,16 +849,19 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       Container(
                                         width: _width * 0.22,
                                         child: Text(
-                                          getComplainList[index]
-                                                      .date3
+                                          jobsInfoList[index]
+                                                      .tdat003
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .date3
-                                                  .toString()
-                                                  .trim(),
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat003
+                                                      .toString()
+                                                      .trim(),
+                                                )),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -770,27 +876,27 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          getComplainList[index]
-                                                      .remarks3
+                                          jobsInfoList[index]
+                                                      .trem003
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .remarks3
+                                              : jobsInfoList[index]
+                                                  .trem003
                                                   .toString()
                                                   .trim(),
                                         ),
                                       ),
                                     ],
                                   ),
-                                if (getComplainList[index]
-                                            .date4
+                                if (jobsInfoList[index]
+                                            .tdat004
                                             .toString()
                                             .trim() !=
                                         'null' ||
-                                    getComplainList[index]
-                                            .remarks4
+                                    jobsInfoList[index]
+                                            .trem004
                                             .toString()
                                             .trim() !=
                                         'null')
@@ -801,16 +907,19 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       Container(
                                         width: _width * 0.22,
                                         child: Text(
-                                          getComplainList[index]
-                                                      .date4
+                                          jobsInfoList[index]
+                                                      .tdat004
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .date4
-                                                  .toString()
-                                                  .trim(),
+                                              : DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                  jobsInfoList[index]
+                                                      .tdat004
+                                                      .toString()
+                                                      .trim(),
+                                                )),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -825,14 +934,14 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          getComplainList[index]
-                                                      .remarks4
+                                          jobsInfoList[index]
+                                                      .trem004
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .remarks4
+                                              : jobsInfoList[index]
+                                                  .trem004
                                                   .toString()
                                                   .trim(),
                                         ),
@@ -885,10 +994,41 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                             // width: _width * 0.25,
                                             child: Flexible(
                                           child: Text(
-                                            getComplainList[index]
-                                                .status
-                                                .toString()
-                                                .trim(),
+                                            jobsInfoList[index]
+                                                        .tjobsts
+                                                        .toString()
+                                                        .trim() ==
+                                                    'N'
+                                                ? 'Pending'
+                                                : jobsInfoList[index]
+                                                            .tjobsts
+                                                            .toString()
+                                                            .trim() ==
+                                                        'P'
+                                                    ? 'Pending'
+                                                    : jobsInfoList[index]
+                                                                .tjobsts
+                                                                .toString()
+                                                                .trim() ==
+                                                            'I'
+                                                        ? 'Installed'
+                                                        : jobsInfoList[index]
+                                                                    .tjobsts
+                                                                    .toString()
+                                                                    .trim() ==
+                                                                ''
+                                                            ? 'UnAssigned'
+                                                            : jobsInfoList[index]
+                                                                        .tjobsts
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    'null'
+                                                                ? 'UnAssigned'
+                                                                : jobsInfoList[
+                                                                        index]
+                                                                    .tjobsts
+                                                                    .toString()
+                                                                    .trim(),
                                             style: TextStyle(
                                                 color: ColorsUtils.redColor,
                                                 fontSize: 20,
@@ -898,6 +1038,12 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                       ],
                                     ),
                                   ),
+                                  if (jobsInfoList[index]
+                                      .tclsrem
+                                      .toString()
+                                      .trim() !=
+                                      'null'
+                                  )
                                   Container(
                                     child: Row(
                                       crossAxisAlignment:
@@ -921,20 +1067,26 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(getComplainList[index]
-                                                      .remarks
+                                          child: Text(jobsInfoList[index]
+                                                      .tclsrem
                                                       .toString()
                                                       .trim() ==
                                                   'null'
                                               ? ''
-                                              : getComplainList[index]
-                                                  .remarks
+                                              : jobsInfoList[index]
+                                                  .tclsrem
                                                   .toString()
                                                   .trim()),
                                         )),
                                       ],
                                     ),
                                   ),
+                                  if (jobsInfoList[index]
+                                      .tclsdat
+                                      .toString()
+                                      .trim() !=
+                                      'null'
+                                  )
                                   Container(
                                     child: Row(
                                       crossAxisAlignment:
@@ -958,16 +1110,16 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                         Container(
                                             // width: _width * 0.25,
                                             child: Flexible(
-                                          child: Text(
-                                            getComplainList[index]
-                                                .closeDate
-                                                .toString()
-                                                .trim(),
-                                            style: TextStyle(
-                                                color: ColorsUtils.redColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                          child: Text(jobsInfoList[index]
+                                              .tclsdat
+                                              .toString()
+                                              .trim() ==
+                                              'null'
+                                              ? ''
+                                              : jobsInfoList[index]
+                                              .tclsdat
+                                              .toString()
+                                              .trim()),
                                         )),
                                       ],
                                     ),
@@ -983,26 +1135,20 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
     );
   }
 
-  Future Post_Complain() async {
-    var response = await http.post(Uri.parse(GetComplain), body: {
-      'FCmpNum': widget.pendingModel.cmp.toString(),
+  Future Post_GetJobInfo() async {
+    var response = await http.post(Uri.parse(GetJobInfo), body: {
+      'FJobNum': widget.pendingModel.tjobnum.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      getComplainList.clear();
+      jobsInfoList.clear();
       for (Map i in result) {
-        getComplainList.add(GetComplainModel.fromJson(i));
+        jobsInfoList.add(JobInfoModel.fromJson(i));
       }
-      setState(() {
-        // loading = false;
-        // searchAssignedList = List.from(assignedList);
-      });
-    } else {
-      // setState(() {
-      //   // loading = false;
-      // });
-    }
+      setState(() {});
+    } else {}
   }
+
   Future<String> translateTextToUrdu(String text) async {
     try {
       final translation = await translator.translate(text, to: 'ur');
@@ -1011,5 +1157,5 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
       print('Translation error: $e');
       return text; // Fallback to original text if translation fails
     }
-    }
+  }
 }
