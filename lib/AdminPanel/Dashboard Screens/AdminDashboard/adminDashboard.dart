@@ -1,13 +1,19 @@
 import 'dart:convert';
+import 'package:al_makkah/AdminPanel/Dashboard%20Screens/InstalledJobs/installedComplains.dart';
 import 'package:al_makkah/Models/JobStatus/JobStatusModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../APIs/apis.dart';
 import '../../../LoginPages/loginscreen.dart';
 import '../../../Models/DailyComparison/DailyComparisonModel.dart';
 import '../../../Models/TechnicianComparison/TechnicianComparisonModel.dart';
 import '../../../Utilities/Colors/colors.dart';
+import '../PendingJobs/pendingComplains.dart';
+import '../TechnicianInfo/InstalledComplains.dart';
+import '../TechnicianInfo/pendingComplains.dart';
+import '../UnassignedJobs/unassignedComplains.dart';
 
 class AdminDashboardUI extends StatefulWidget {
   const AdminDashboardUI({super.key});
@@ -20,6 +26,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
   List<JobStatusModel> jobStatusList = [];
   List<TechnicianComparisonModel> technicianComparisonList = [];
   List<DailyComparisonModel> dailyComparisonList = [];
+  String? name;
 
   @override
   void initState() {
@@ -28,6 +35,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
     get_JobStatus();
     get_TechnicianComparison();
     post_DailyComparison();
+    getLoginInfo();
   }
 
   @override
@@ -37,7 +45,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Dashboard',
+            'Hello ${name.toString().trim()}',
             style: TextStyle(color: ColorsUtils.whiteColor),
           ),
           backgroundColor: ColorsUtils.baigeColor,
@@ -72,7 +80,11 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                         children: [
                           InkWell(
                             onTap: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> UnassignedInstallationUI()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UnassignedComplainsUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -127,7 +139,11 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           ),
                           InkWell(
                             onTap: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PendingJobsComplainsUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -188,7 +204,11 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                         children: [
                           InkWell(
                             onTap: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          InstalledCustomersUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -617,23 +637,30 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                         const SizedBox(height: 8),
                         InkWell(
                           onTap: () {
-                            // _showPhoneDialog(model.mobile.toString());
+                            _showPhoneDialog(model.mobile.toString());
                           },
                           child: Text(
                             model.mobile.toString().trim(),
                             style: TextStyle(
                               decoration: TextDecoration.underline,
-                              decorationColor: ColorsUtils.blackColor,
+                              decorationColor: ColorsUtils.redColor,
                               decorationThickness: 2,
                               fontSize: 16,
-                              color: ColorsUtils.blackColor,
+                              color: ColorsUtils.redColor,
                             ),
                           ),
                         ),
                         const SizedBox(height: 8),
                         const Divider(),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PendingComplainsUI(
+                                          technicianComparison: model,
+                                        )));
+                          },
                           child: const ListTile(
                             leading: Icon(Icons.pending),
                             title: Text("Pending Complains"),
@@ -641,7 +668,14 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => InstalledComplainsUI(
+                                          technicianComparison: model,
+                                        )));
+                          },
                           child: const ListTile(
                             leading: Icon(Icons.input),
                             title: Text("Installed Complains"),
@@ -696,5 +730,73 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
       }
       setState(() {});
     }
+  }
+
+  Future<void> _showPhoneDialog(String phoneNumber) async {
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose an option'),
+          content: Text('Would you like to call or message on WhatsApp?'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.phone,
+                  size: _height * 0.04, color: Color(0xff06D001)),
+              onPressed: () {
+                _makePhoneCall(phoneNumber);
+                Navigator.of(context).pop();
+              },
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            InkWell(
+              onTap: () {
+                _openWhatsApp(phoneNumber);
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                height: _height * 0.04,
+                child: Image.asset('assets/whatsapp.png'),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  ///-----------------------> Function to Navigate to phone dail <-----------------///
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunch(launchUri.toString())) {
+      await launch(launchUri.toString());
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
+  }
+
+  ///-------------------> Function to Navigate to whatsapp <------------------///
+  Future<void> _openWhatsApp(String phoneNumber) async {
+    final launchUri = Uri(
+      scheme: 'https',
+      path: 'wa.me/$phoneNumber',
+    );
+    if (await canLaunch(launchUri.toString())) {
+      await launch(launchUri.toString());
+    } else {
+      throw 'Could not launch WhatsApp for $phoneNumber';
+    }
+  }
+  getLoginInfo() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    name = sp.getString('userName');
+    setState(() {});
   }
 }

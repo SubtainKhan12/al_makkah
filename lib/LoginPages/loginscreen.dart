@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:al_makkah/LoginPages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../APIs/apis.dart';
 import '../AdminPanel/Dashboard Screens/AdminDashboard/adminDashboard.dart';
 import '../InstallerPanel/DashboardScreens/Dashboard/dashboard.dart';
 import '../Models/LoginModel/LoginModel.dart';
+import '../NotificationService/notificationService.dart';
 import '../SharedPreferences/sharedPreferences.dart';
+import '../SplashScreen/splashScreen.dart';
 import '../Utilities/Colors/colors.dart';
 import '../Utilities/Loader/loader.dart';
 import '../Utilities/Snackbar/snackbar.dart';
@@ -23,6 +26,8 @@ class _LoginUIState extends State<LoginUI> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
+  String? _token;
+  static String KEYNAME = "userId";
 
   void _toggleObscureText() {
     setState(() {
@@ -31,26 +36,26 @@ class _LoginUIState extends State<LoginUI> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    PushNotificationServices().gettoken().then((token) {
+      setState(() {
+        _token = token;
+        print(_token);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var _width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //     begin: Alignment.topLeft,
@@ -105,7 +110,7 @@ class _LoginUIState extends State<LoginUI> {
                             labelText: "Email Address",
                             border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -127,7 +132,7 @@ class _LoginUIState extends State<LoginUI> {
                             labelText: "Password",
                             border: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -148,7 +153,7 @@ class _LoginUIState extends State<LoginUI> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                      const RegisterUI()));
+                                          const RegisterUI()));
                             },
                             child: Text(
                               "Register",
@@ -181,7 +186,7 @@ class _LoginUIState extends State<LoginUI> {
                         width: 250,
                         decoration: BoxDecoration(
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(7)),
+                                const BorderRadius.all(Radius.circular(7)),
                             color: ColorsUtils.baigeColor),
                         child: const Padding(
                           padding: EdgeInsets.all(12.0),
@@ -195,7 +200,6 @@ class _LoginUIState extends State<LoginUI> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -367,7 +371,8 @@ class _LoginUIState extends State<LoginUI> {
                                 // SizedBox(width: 20,),
                                 const Text(
                                   'Complain Status',
-                                  style: TextStyle(fontWeight: FontWeight.w500,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
                                       fontSize: 12),
                                 ),
                               ],
@@ -385,7 +390,10 @@ class _LoginUIState extends State<LoginUI> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/CrystalSolutionslogo.png', height: 30,),
+                  Image.asset(
+                    'assets/CrystalSolutionslogo.png',
+                    height: 30,
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
@@ -393,33 +401,31 @@ class _LoginUIState extends State<LoginUI> {
                     children: [
                       RichText(
                           text: TextSpan(children: [
-                            TextSpan(
-                                text: "Powered by ",
-                                style: TextStyle(
-                                    color: ColorsUtils.blackColor)),
-                            TextSpan(
-                                text: "Crystal ",
-                                style: TextStyle(
-                                    color: ColorsUtils.blueCrystal,
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(
-                                text: "Solutions",
-                                style: TextStyle(
-                                    color: ColorsUtils.orangeCrystal,
-                                    fontWeight: FontWeight.bold)),
-                          ])),
+                        TextSpan(
+                            text: "Powered by ",
+                            style: TextStyle(color: ColorsUtils.blackColor)),
+                        TextSpan(
+                            text: "Crystal ",
+                            style: TextStyle(
+                                color: ColorsUtils.blueCrystal,
+                                fontWeight: FontWeight.bold)),
+                        TextSpan(
+                            text: "Solutions",
+                            style: TextStyle(
+                                color: ColorsUtils.orangeCrystal,
+                                fontWeight: FontWeight.bold)),
+                      ])),
                       RichText(
                           text: TextSpan(children: [
-                            TextSpan(
-                                text: "Contact us: ",
-                                style: TextStyle(
-                                    color: ColorsUtils.blackColor)),
-                            TextSpan(
-                                text: "+92 304 4770075",
-                                style: TextStyle(
-                                    color: ColorsUtils.blueCrystal,
-                                    fontWeight: FontWeight.bold)),
-                          ])),
+                        TextSpan(
+                            text: "Contact us: ",
+                            style: TextStyle(color: ColorsUtils.blackColor)),
+                        TextSpan(
+                            text: "+92 304 4770075",
+                            style: TextStyle(
+                                color: ColorsUtils.blueCrystal,
+                                fontWeight: FontWeight.bold)),
+                      ])),
                     ],
                   ),
                 ],
@@ -432,11 +438,18 @@ class _LoginUIState extends State<LoginUI> {
   }
 
   ///---------------Login API Function------------------///////////
+
   Future<void> post_login() async {
-    try {
+    if (_token == null) {
+      Snackbar.showSnackBar(
+          context, 'Token not available. Try again.', ColorsUtils.redColor);
+      return;
+    }
+
       var response = await http.post(Uri.parse(login), body: {
         'userid': _emailController.text.trim(),
         'password': _passwordController.text.trim(),
+        'token': _token,
       });
 
       if (response.statusCode == 200) {
@@ -448,17 +461,23 @@ class _LoginUIState extends State<LoginUI> {
           Shared_pref.saveuser(loginModelList!.user!);
 
           if (loginModelList?.user?.tusrtyp == 'Technician') {
+            var sharedPref = await SharedPreferences.getInstance();
+            sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+            sharedPref.setString('userType', 'Technician');
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const DashboardUI()),
-                  (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
             );
             Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
           } else if (loginModelList?.user?.tusrtyp == 'Admin') {
+            var sharedPref = await SharedPreferences.getInstance();
+            sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+            sharedPref.setString('userType', 'Admin');
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const AdminDashboardUI()),
-                  (Route<dynamic> route) => false,
+              (Route<dynamic> route) => false,
             );
             Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
           }
@@ -472,13 +491,5 @@ class _LoginUIState extends State<LoginUI> {
         Snackbar.showSnackBar(context, 'Login Failed', Colors.red);
         Navigator.pop(context);
       }
-    } catch (e) {
-      // Handle network or JSON parsing errors
-      Snackbar.showSnackBar(context, 'An error occurred. Please try again.', Colors.red);
-      Navigator.pop(context);
-    }
   }
-
 }
-
-

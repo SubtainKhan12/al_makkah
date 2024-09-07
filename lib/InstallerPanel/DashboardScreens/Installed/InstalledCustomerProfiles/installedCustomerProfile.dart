@@ -8,10 +8,12 @@ import 'package:translator/translator.dart';
 import '../../../../APIs/apis.dart';
 
 import '../../../../Models/Installed/InstalledTechnicianJobModel.dart';
+import '../../../../Models/UnassignedJobs/UnAssignedJobsModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
 
 class InstalledCustomerDetail extends StatefulWidget {
   InstalledTechnicianJobModel installedModel;
+
 
   InstalledCustomerDetail({super.key, required this.installedModel});
 

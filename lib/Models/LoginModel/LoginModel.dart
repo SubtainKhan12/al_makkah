@@ -1,7 +1,10 @@
-/// user : {"id":"76","tusrid":"subtain","tusrnam":"Subtain","tusrpwd":"7549","tusrsts":"Yes","tusrtyp":"Technician","tmobnum":"03047738612","temladd":"sohaibsaleem89@gmail.com","techcod":"001"}
+import 'dart:convert';
+/// user : {"id":76,"tusrid":"irfan","tusrnam":"IRFAN","tusrpwd":"7549","tusrsts":"Yes","tusrtyp":"Technician","tmobnum":"03047738612","temladd":"sohaibsaleem89@gmail.com","techcod":"001","token":null}
 /// error : 200
-/// message : "login success"
+/// message : "Login success"
 
+LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str));
+String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 class LoginModel {
   LoginModel({
       User? user, 
@@ -43,19 +46,22 @@ LoginModel copyWith({  User? user,
 
 }
 
-/// id : "76"
-/// tusrid : "subtain"
-/// tusrnam : "Subtain"
+/// id : 76
+/// tusrid : "irfan"
+/// tusrnam : "IRFAN"
 /// tusrpwd : "7549"
 /// tusrsts : "Yes"
 /// tusrtyp : "Technician"
 /// tmobnum : "03047738612"
 /// temladd : "sohaibsaleem89@gmail.com"
 /// techcod : "001"
+/// token : null
 
+User userFromJson(String str) => User.fromJson(json.decode(str));
+String userToJson(User data) => json.encode(data.toJson());
 class User {
   User({
-      String? id, 
+      num? id, 
       String? tusrid, 
       String? tusrnam, 
       String? tusrpwd, 
@@ -63,7 +69,8 @@ class User {
       String? tusrtyp, 
       String? tmobnum, 
       String? temladd, 
-      String? techcod,}){
+      String? techcod, 
+      dynamic token,}){
     _id = id;
     _tusrid = tusrid;
     _tusrnam = tusrnam;
@@ -73,6 +80,7 @@ class User {
     _tmobnum = tmobnum;
     _temladd = temladd;
     _techcod = techcod;
+    _token = token;
 }
 
   User.fromJson(dynamic json) {
@@ -85,8 +93,9 @@ class User {
     _tmobnum = json['tmobnum'];
     _temladd = json['temladd'];
     _techcod = json['techcod'];
+    _token = json['token'];
   }
-  String? _id;
+  num? _id;
   String? _tusrid;
   String? _tusrnam;
   String? _tusrpwd;
@@ -95,7 +104,8 @@ class User {
   String? _tmobnum;
   String? _temladd;
   String? _techcod;
-User copyWith({  String? id,
+  dynamic _token;
+User copyWith({  num? id,
   String? tusrid,
   String? tusrnam,
   String? tusrpwd,
@@ -104,6 +114,7 @@ User copyWith({  String? id,
   String? tmobnum,
   String? temladd,
   String? techcod,
+  dynamic token,
 }) => User(  id: id ?? _id,
   tusrid: tusrid ?? _tusrid,
   tusrnam: tusrnam ?? _tusrnam,
@@ -113,8 +124,9 @@ User copyWith({  String? id,
   tmobnum: tmobnum ?? _tmobnum,
   temladd: temladd ?? _temladd,
   techcod: techcod ?? _techcod,
+  token: token ?? _token,
 );
-  String? get id => _id;
+  num? get id => _id;
   String? get tusrid => _tusrid;
   String? get tusrnam => _tusrnam;
   String? get tusrpwd => _tusrpwd;
@@ -123,6 +135,7 @@ User copyWith({  String? id,
   String? get tmobnum => _tmobnum;
   String? get temladd => _temladd;
   String? get techcod => _techcod;
+  dynamic get token => _token;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -135,6 +148,7 @@ User copyWith({  String? id,
     map['tmobnum'] = _tmobnum;
     map['temladd'] = _temladd;
     map['techcod'] = _techcod;
+    map['token'] = _token;
     return map;
   }
 

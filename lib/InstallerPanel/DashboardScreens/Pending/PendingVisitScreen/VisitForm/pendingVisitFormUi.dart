@@ -306,11 +306,12 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Text(value,style: TextStyle(fontSize: 14),),
                   );
                 }).toList(),
                 decoration: InputDecoration(
                   labelText: "Status",
+
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(3),
                     borderSide: const BorderSide(

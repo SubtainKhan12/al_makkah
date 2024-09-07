@@ -7,7 +7,7 @@ class Shared_pref with ChangeNotifier{
 
   static Future saveuser(User user)async{
     final SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setString("id", user.id??"");
+    // sp.setString("id", user.id ?? '');
     sp.setString("userId", user.tusrid??"");
     sp.setString("userName", user.tusrnam??"");
     sp.setString("userEmail", user.temladd??"");

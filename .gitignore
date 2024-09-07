@@ -24,6 +24,11 @@ migrate_working_dir/
 
 # Flutter/Dart/Pub related
 lib/APIs/apis.dart
+lib/firebase_options.dart
+lib/NotificationService/notificationService.dart
+firebase.json
+android/app/google-services.json
+lib/main.dart
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/

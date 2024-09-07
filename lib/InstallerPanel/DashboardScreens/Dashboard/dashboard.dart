@@ -18,7 +18,7 @@ class DashboardUI extends StatefulWidget {
 
 class _DashboardUIState extends State<DashboardUI> {
   List<TechnicianStatusModel> technicianStatusList = [];
-  String? technicianCode;
+  String? technicianCode,name;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _DashboardUIState extends State<DashboardUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Dashboard',
+          'Hello ${name.toString().trim()}',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
         backgroundColor: ColorsUtils.baigeColor,
@@ -265,6 +265,7 @@ class _DashboardUIState extends State<DashboardUI> {
   getLoginInfo() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     technicianCode = sp.getString('technicianCode');
+    name = sp.getString('userName');
     setState(() {});
     post_TechnicianStatus();
   }
