@@ -9,6 +9,7 @@ import '../../../APIs/apis.dart';
 import '../../../LoginPages/loginscreen.dart';
 import '../../../Models/DailyComparison/DailyComparisonModel.dart';
 import '../../../Models/TechnicianComparison/TechnicianComparisonModel.dart';
+import '../../../SplashScreen/splashScreen.dart';
 import '../../../Utilities/Colors/colors.dart';
 import '../PendingJobs/pendingComplains.dart';
 import '../TechnicianInfo/InstalledComplains.dart';
@@ -53,8 +54,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const LoginUI()));
+                  logout();
                 },
                 icon: const Icon(Icons.logout))
           ],
@@ -794,9 +794,24 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
       throw 'Could not launch WhatsApp for $phoneNumber';
     }
   }
+
   getLoginInfo() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     name = sp.getString('userName');
     setState(() {});
+  }
+
+  Future<void> logout() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    sharedPref.remove(SplashScreenState.KEYLOGIN);
+
+    sharedPref.remove('userType');
+
+    // Navigate to the Login screen
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginUI()),
+      (Route<dynamic> route) => false,
+    );
   }
 }

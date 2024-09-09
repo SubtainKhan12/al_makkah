@@ -546,6 +546,9 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                           child: Text(jobsInfoList[index]
                                               .titmdsc
                                               .toString()
+                                              .trim()== 'null'? '':jobsInfoList[index]
+                                              .titmdsc
+                                              .toString()
                                               .trim()),
                                         )),
                                       ],
@@ -575,6 +578,9 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                             // width: _width * 0.25,
                                             child: Flexible(
                                           child: Text(jobsInfoList[index]
+                                              .titmser
+                                              .toString()
+                                              .trim()== 'null'? '':jobsInfoList[index]
                                               .titmser
                                               .toString()
                                               .trim()),

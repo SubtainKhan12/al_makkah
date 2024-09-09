@@ -432,6 +432,9 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
                                           child: Text(jobsInfoList[index]
                                               .city
                                               .toString()
+                                              .trim()== 'null'? '':jobsInfoList[index]
+                                              .city
+                                              .toString()
                                               .trim()),
                                         )),
                                   ],
@@ -544,6 +547,9 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
                                           child: Text(jobsInfoList[index]
                                               .titmdsc
                                               .toString()
+                                              .trim()== 'null'? '':jobsInfoList[index]
+                                              .titmdsc
+                                              .toString()
                                               .trim()),
                                         )),
                                   ],
@@ -573,6 +579,9 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
                                       // width: _width * 0.25,
                                         child: Flexible(
                                           child: Text(jobsInfoList[index]
+                                              .titmser
+                                              .toString()
+                                              .trim()== 'null'? '':jobsInfoList[index]
                                               .titmser
                                               .toString()
                                               .trim()),

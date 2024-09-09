@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../APIs/apis.dart';
 import '../../../LoginPages/loginscreen.dart';
 import '../../../Models/TechnicianStatus/TechnicianStatusModel.dart';
+import '../../../SplashScreen/splashScreen.dart';
 import '../../../Utilities/Colors/colors.dart';
 import '../Installed/installed.dart';
 import '../Pending/pending.dart';
@@ -30,8 +31,14 @@ class _DashboardUIState extends State<DashboardUI> {
 
   @override
   Widget build(BuildContext context) {
-    var h = MediaQuery.of(context).size.height;
-    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var w = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -43,8 +50,7 @@ class _DashboardUIState extends State<DashboardUI> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const LoginUI()));
+                logout();
               },
               icon: const Icon(Icons.logout))
         ],
@@ -108,21 +114,21 @@ class _DashboardUIState extends State<DashboardUI> {
                                               color: ColorsUtils.greyColor)),
                                       child: Center(
                                           child: Text(
-                                        technicianStatusList[index]
-                                                    .pending
-                                                    .toString()
-                                                    .trim() ==
+                                            technicianStatusList[index]
+                                                .pending
+                                                .toString()
+                                                .trim() ==
                                                 'null'
-                                            ? '0'
-                                            : technicianStatusList[index]
+                                                ? '0'
+                                                : technicianStatusList[index]
                                                 .pending
                                                 .toString()
                                                 .trim(),
-                                        style: TextStyle(
-                                            fontSize: 53,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey.shade400),
-                                      )),
+                                            style: TextStyle(
+                                                fontSize: 53,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.grey.shade400),
+                                          )),
                                     )
                                   ],
                                 ),
@@ -175,21 +181,21 @@ class _DashboardUIState extends State<DashboardUI> {
                                               color: ColorsUtils.greyColor)),
                                       child: Center(
                                           child: Text(
-                                        technicianStatusList[index]
-                                                    .installed
-                                                    .toString()
-                                                    .trim() ==
+                                            technicianStatusList[index]
+                                                .installed
+                                                .toString()
+                                                .trim() ==
                                                 'null'
-                                            ? '0'
-                                            : technicianStatusList[index]
+                                                ? '0'
+                                                : technicianStatusList[index]
                                                 .installed
                                                 .toString()
                                                 .trim(),
-                                        style: TextStyle(
-                                            fontSize: 53,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey.shade400),
-                                      )),
+                                            style: TextStyle(
+                                                fontSize: 53,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.grey.shade400),
+                                          )),
                                     )
                                   ],
                                 ),
@@ -235,21 +241,21 @@ class _DashboardUIState extends State<DashboardUI> {
                                             color: ColorsUtils.greyColor)),
                                     child: Center(
                                         child: Text(
-                                      technicianStatusList[index]
-                                                  .closed
-                                                  .toString()
-                                                  .trim() ==
+                                          technicianStatusList[index]
+                                              .closed
+                                              .toString()
+                                              .trim() ==
                                               'null'
-                                          ? '0'
-                                          : technicianStatusList[index]
+                                              ? '0'
+                                              : technicianStatusList[index]
                                               .closed
                                               .toString()
                                               .trim(),
-                                      style: TextStyle(
-                                          fontSize: 53,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.grey.shade400),
-                                    )),
+                                          style: TextStyle(
+                                              fontSize: 53,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey.shade400),
+                                        )),
                                   )
                                 ],
                               ),
@@ -259,11 +265,11 @@ class _DashboardUIState extends State<DashboardUI> {
                       );
                     }),
               ),
-              ElevatedButton(onPressed: () async{
-                GetServerKey getServerKey = GetServerKey();
-                String accessToken = await getServerKey.GetServerKeyToken();
-                print('---------------------->$accessToken');
-              }, child: Text("GetServerKey"))
+              // ElevatedButton(onPressed: () async{
+              //   GetServerKey getServerKey = GetServerKey();
+              //   String accessToken = await getServerKey.GetServerKeyToken();
+              //   print('---------------------->$accessToken');
+              // }, child: Text("GetServerKey"))
             ],
           ),
         ),
@@ -292,4 +298,17 @@ class _DashboardUIState extends State<DashboardUI> {
     setState(() {});
     post_TechnicianStatus();
   }
+  Future<void> logout() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    sharedPref.remove(SplashScreenState.KEYLOGIN); // Remove login state
+    sharedPref.remove('userType'); // Remove user type
+
+    // Navigate to the Login screen
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginUI()),
+          (Route<dynamic> route) => false,
+    );
+  }
+
 }
