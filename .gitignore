@@ -26,6 +26,7 @@ migrate_working_dir/
 lib/APIs/apis.dart
 lib/firebase_options.dart
 lib/NotificationService/notificationService.dart
+lib/NotificationService/getServerKey.dart
 firebase.json
 android/app/google-services.json
 lib/main.dart

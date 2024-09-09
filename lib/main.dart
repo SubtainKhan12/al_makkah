@@ -8,7 +8,9 @@ import 'firebase_options.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  if (Firebase.apps.isEmpty) {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  }
   runApp(const MyApp());
 }
 
@@ -43,7 +45,7 @@ class _MyAppState extends State<MyApp> {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
         alert: false, badge: false, sound: false);
-    const android = AndroidNotificationDetails('iac', 'iacapp',
+    const android = AndroidNotificationDetails('amcs', 'alMakkah',
         enableVibration: true,
         playSound: true,
         priority: Priority.high,
@@ -93,7 +95,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     requestPermission().then((value) {
       initLocalNotification();
-      FirebaseMessaging.instance.subscribeToTopic("iacadmin");
+      FirebaseMessaging.instance.subscribeToTopic("alMakkah");
     });
     super.initState();
   }
