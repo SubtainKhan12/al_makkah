@@ -11,4 +11,5 @@ class ColorsUtils {
   static var baigeColor = Color(0xff697565);
   static var blueCrystal = Color(0xff2D2F42);
   static var orangeCrystal = Color(0xffD2925E);
+  static var lightBeige = Color(0xff708871);
 }

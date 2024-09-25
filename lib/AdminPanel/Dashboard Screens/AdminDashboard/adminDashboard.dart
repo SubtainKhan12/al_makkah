@@ -11,6 +11,7 @@ import '../../../Models/DailyComparison/DailyComparisonModel.dart';
 import '../../../Models/TechnicianComparison/TechnicianComparisonModel.dart';
 import '../../../SplashScreen/splashScreen.dart';
 import '../../../Utilities/Colors/colors.dart';
+import '../AdminDrawer/adminDrawerUi.dart';
 import '../PendingJobs/pendingComplains.dart';
 import '../TechnicianInfo/InstalledComplains.dart';
 import '../TechnicianInfo/pendingComplains.dart';
@@ -59,7 +60,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                 icon: const Icon(Icons.logout))
           ],
         ),
-        // drawer: AdminDrawerUI(),
+        drawer: AdminDrawerUI(),
         body: RefreshIndicator(
           onRefresh: () async {
             get_JobStatus();
