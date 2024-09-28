@@ -8,17 +8,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../APIs/apis.dart';
 import '../../../Models/Installed/InstalledTechnicianJobModel.dart';
 import '../../../Utilities/Colors/colors.dart';
-import 'InstalledCustomerProfiles/installedCustomerProfile.dart';
+import 'DoneCustomerProfiles/doneCustomerProfile.dart';
 
 
-class InstalledUI extends StatefulWidget {
-  const InstalledUI({super.key});
+class DoneUI extends StatefulWidget {
+  const DoneUI({super.key});
 
   @override
-  State<InstalledUI> createState() => _InstalledUIState();
+  State<DoneUI> createState() => _DoneUIState();
 }
 
-class _InstalledUIState extends State<InstalledUI> {
+class _DoneUIState extends State<DoneUI> {
   List<InstalledTechnicianJobModel> installedTechnicianJobList = [];
   List<InstalledTechnicianJobModel> searchInstalledList = [];
   String? technicianCode;
@@ -36,7 +36,7 @@ class _InstalledUIState extends State<InstalledUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Installed Applications',
+          'Done Applications',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
         backgroundColor: ColorsUtils.baigeColor,
@@ -45,7 +45,7 @@ class _InstalledUIState extends State<InstalledUI> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
         child: RefreshIndicator(
-          onRefresh: Post_InstalledTechnicianJob,
+          onRefresh: Post_TechnicianDoneJobs,
           child: Column(
             children: [
               TextField(
@@ -217,8 +217,8 @@ class _InstalledUIState extends State<InstalledUI> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        InstalledCustomerDetail(
-                                            installedModel: model)));
+                                        DoneCustomerDetail(
+                                            installedModel: model))).then((value)=>Post_TechnicianDoneJobs());
                           },
                           child: const ListTile(
                             leading: Icon(Icons.info),
@@ -226,21 +226,6 @@ class _InstalledUIState extends State<InstalledUI> {
                             // subtitle: Text("Customer CMP: ${model.cmp}"),
                           ),
                         ),
-                        // InkWell(
-                        //   onTap: (){
-                        //     Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //             builder: (context) =>
-                        //                 InstalledVisitScreen(
-                        //                     installedModel: model)));
-                        //   },
-                        //   child: const ListTile(
-                        //     leading: Icon(Icons.location_on),
-                        //     title: Text("Visit"),
-                        //     // subtitle: Text("Visit Date: ${model.date}"),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -253,8 +238,8 @@ class _InstalledUIState extends State<InstalledUI> {
     );
   }
 
-  Future Post_InstalledTechnicianJob() async {
-    var response = await http.post(Uri.parse(TechnicianInstalledJobs), body: {
+  Future Post_TechnicianDoneJobs() async {
+    var response = await http.post(Uri.parse(TechnicianDoneJobs), body: {
       'FTchCod': technicianCode.toString(),
     });
     var result = jsonDecode(response.body);
@@ -280,7 +265,7 @@ class _InstalledUIState extends State<InstalledUI> {
     SharedPreferences sp = await SharedPreferences.getInstance();
     technicianCode = sp.getString('technicianCode');
     setState(() {});
-    Post_InstalledTechnicianJob();
+    Post_TechnicianDoneJobs();
   }
 
   void search(String query) {

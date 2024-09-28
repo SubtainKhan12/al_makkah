@@ -1,25 +1,28 @@
 import 'dart:convert';
 
-import 'package:al_makkah/Models/InstalledJobs/InstalledJobsModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../APIs/apis.dart';
+import '../../../InstallerPanel/DashboardScreens/DoneInstallations/DoneCustomerProfiles/doneCustomerProfile.dart';
+import '../../../Models/Installed/InstalledTechnicianJobModel.dart';
+import '../../../Models/TechnicianComparison/TechnicianComparisonModel.dart';
 import '../../../Utilities/Colors/colors.dart';
-import 'installedCustomerDetails.dart';
-class InstalledCustomersUI extends StatefulWidget {
-  const InstalledCustomersUI({super.key});
+
+class DoneComplainsUI extends StatefulWidget {
+  TechnicianComparisonModel technicianComparison;
+   DoneComplainsUI({super.key,required this.technicianComparison});
 
   @override
-  State<InstalledCustomersUI> createState() => _InstalledCustomersUIState();
+  State<DoneComplainsUI> createState() => _DoneComplainsUIState();
 }
 
-class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
-  List<InstalledJobsModel> installedJobList = [];
-  List<InstalledJobsModel> searchInstalledList = [];
+class _DoneComplainsUIState extends State<DoneComplainsUI> {
+  List<InstalledTechnicianJobModel> installedTechnicianJobList = [];
+  List<InstalledTechnicianJobModel> searchInstalledList = [];
   bool loading = true;
+
 
   @override
   void initState() {
@@ -32,7 +35,7 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Installed Applications',
+          'Done Applications',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
         backgroundColor: ColorsUtils.baigeColor,
@@ -62,7 +65,8 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
               Expanded(
                 child: loading
                     ? Center(child: CircularProgressIndicator())
-                    : searchInstalledList.isEmpty
+                    : searchInstalledList
+                    .isEmpty
                     ? Center(
                     child: Text(
                       "No Application is Installed",
@@ -110,11 +114,7 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
                                           fontWeight: FontWeight.w500),
                                     ),
                                     Text(
-                                      DateFormat('dd-MM-yyyy').format(
-                                          DateTime.parse(
-                                              searchInstalledList[index]
-                                                  .tjobdat
-                                                  .toString())),
+                                      DateFormat('dd-MM-yyyy').format(DateTime.parse(searchInstalledList[index].tjobdat.toString())),
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500),
@@ -151,7 +151,7 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
     );
   }
 
-  Widget _buildBottomSheet(BuildContext context, InstalledJobsModel model) {
+  Widget _buildBottomSheet(BuildContext context, InstalledTechnicianJobModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -216,9 +216,8 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        InstalledCustomerDetails(
-                                          installedJobsModel: model,
-                                        )));
+                                        DoneCustomerDetail(
+                                            installedModel: model)));
                           },
                           child: const ListTile(
                             leading: Icon(Icons.info),
@@ -254,18 +253,20 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
   }
 
   Future Post_InstalledTechnicianJob() async {
-    var response = await http.get(Uri.parse(GetInstalledJobs));
+    var response = await http.post(Uri.parse(TechnicianDoneJobs), body: {
+      'FTchCod': widget.technicianComparison.ttchcod.toString(),
+    });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         loading = false;
       });
-      installedJobList.clear();
+      installedTechnicianJobList.clear();
       for (Map i in result) {
-        installedJobList.add(InstalledJobsModel.fromJson(i));
+        installedTechnicianJobList.add(InstalledTechnicianJobModel.fromJson(i));
       }
       setState(() {
-        searchInstalledList = List.from(installedJobList);
+        searchInstalledList = List.from(installedTechnicianJobList);
       });
     } else {
       setState(() {
@@ -274,9 +275,10 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
     }
   }
 
+
   void search(String query) {
     setState(() {
-      searchInstalledList = installedJobList.where((category) {
+      searchInstalledList = installedTechnicianJobList.where((category) {
         final customerNameMatches =
             category.tcstnam?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
@@ -284,8 +286,7 @@ class _InstalledCustomersUIState extends State<InstalledCustomersUI> {
             category.tmobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final complainNumberMatches =
-            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ??
-                false;
+            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ?? false;
         return customerNameMatches ||
             mobileNumberMatches ||
             complainNumberMatches;

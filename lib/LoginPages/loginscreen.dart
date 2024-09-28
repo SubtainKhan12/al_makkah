@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:al_makkah/CustomerPanel/NewComplain/newComplain.dart';
 import 'package:al_makkah/LoginPages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -49,29 +50,25 @@ class _LoginUIState extends State<LoginUI> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery.of(context).size.height;
-    var _width = MediaQuery.of(context).size.width;
+    var _height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var _width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
-            // gradient: LinearGradient(
-            //     begin: Alignment.topLeft,
-            //     end: Alignment.bottomRight,
-            //     colors: [
-            //   Color(0xffF6EACB),
-            //   // Colors.black,
-            //   Colors.white24,
-            // ])
-            color: Color(0xffFFF6EA),
-          ),
+          // height: MediaQuery.of(context).size.height,
+          // width: MediaQuery.of(context).size.width,
+          color: Color(0xffFFF6EA),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 50,
+            children: [
+              SizedBox(
+                height: _height * 0.05,
               ),
               Container(
                 height: _height * 0.22,
@@ -81,8 +78,8 @@ class _LoginUIState extends State<LoginUI> {
                   "assets/al-makkah.png",
                 ),
               ),
-              const SizedBox(
-                height: 10,
+              SizedBox(
+                height: _height * 0.01,
               ),
               Container(
                 width: _width * 0.85,
@@ -94,8 +91,9 @@ class _LoginUIState extends State<LoginUI> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      height: 50,
+                    SizedBox(
+                      height: _height * 0.05,
+
                     ),
                     SizedBox(
                       width: _width * 0.67,
@@ -110,12 +108,13 @@ class _LoginUIState extends State<LoginUI> {
                             labelText: "Email Address",
                             border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
-                    const SizedBox(
-                      height: 12,
+                    SizedBox(
+                      height: _height * 0.013,
+
                     ),
                     Container(
                       width: _width * 0.67,
@@ -132,7 +131,7 @@ class _LoginUIState extends State<LoginUI> {
                             labelText: "Password",
                             border: const OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
+                              BorderRadius.all(Radius.circular(8)),
                             )),
                       ),
                     ),
@@ -145,7 +144,8 @@ class _LoginUIState extends State<LoginUI> {
                               onPressed: () {},
                               child: Text(
                                 'New Job',
-                                style: TextStyle(color: ColorsUtils.baigeColor),
+                                style: TextStyle(color: ColorsUtils.baigeColor,
+                                    fontSize: _height * 0.017),
                               )),
                           TextButton(
                             onPressed: () {
@@ -153,11 +153,12 @@ class _LoginUIState extends State<LoginUI> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const RegisterUI()));
+                                      const RegisterUI()));
                             },
                             child: Text(
                               "Register",
-                              style: TextStyle(color: ColorsUtils.baigeColor),
+                              style: TextStyle(color: ColorsUtils.baigeColor,
+                                  fontSize: _height * 0.017),
                             ),
                           )
                         ],
@@ -171,7 +172,8 @@ class _LoginUIState extends State<LoginUI> {
                           onPressed: () {},
                           child: Text(
                             "Forget Password",
-                            style: TextStyle(color: ColorsUtils.baigeColor),
+                            style: TextStyle(color: ColorsUtils.baigeColor,
+                                fontSize: _height * 0.017),
                           ),
                         ),
                       ),
@@ -183,18 +185,19 @@ class _LoginUIState extends State<LoginUI> {
                       },
                       child: Container(
                         alignment: Alignment.center,
-                        width: 250,
+                        width: _width * 0.67,
+                        height: _height * 0.065,
                         decoration: BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(7)),
+                            const BorderRadius.all(Radius.circular(7)),
                             color: ColorsUtils.baigeColor),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Text(
                             'Login',
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: _height * 0.025,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -203,8 +206,9 @@ class _LoginUIState extends State<LoginUI> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: _height * 0.015,
+
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -237,18 +241,18 @@ class _LoginUIState extends State<LoginUI> {
                                   Image.asset(
                                     'assets/install.png',
                                     color: Colors.blueAccent,
-                                    height: 30,
+                                    height: _height * 0.03,
                                   ),
                                   const VerticalDivider(
                                     color: Colors.grey,
                                     thickness: 1,
                                   ),
                                   // SizedBox(width: 20,),
-                                  const Text(
+                                  Text(
                                     'AC Installation',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 12),
+                                        fontSize: _height * 0.014),
                                   ),
                                 ],
                               ),
@@ -279,18 +283,18 @@ class _LoginUIState extends State<LoginUI> {
                                   Image.asset(
                                     'assets/clean.png',
                                     color: Colors.blueAccent,
-                                    height: 30,
+                                    height: _height * 0.03,
                                   ),
                                   const VerticalDivider(
                                     color: Colors.grey,
                                     thickness: 1,
                                   ),
                                   // SizedBox(width: 20,),
-                                  const Text(
+                                  Text(
                                     'Ac Service',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 12),
+                                        fontSize: _height * 0.014),
                                   ),
                                 ],
                               ),
@@ -299,46 +303,52 @@ class _LoginUIState extends State<LoginUI> {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 15,
+                    SizedBox(
+                      height: _height * 0.012,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Material(
-                          borderRadius: BorderRadius.circular(5),
-                          elevation: 10,
-                          shadowColor: const Color(0xffF6EACB),
-                          child: Container(
-                            height: _height * 0.06,
-                            width: _width * 0.4,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffF6EACB),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: _width * 0.03,
-                                ),
-                                Image.asset(
-                                  'assets/complaint.png',
-                                  color: Colors.red,
-                                  height: 30,
-                                ),
-                                const VerticalDivider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                ),
-                                // SizedBox(width: 20,),
-                                const Text(
-                                  'New Complain',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 12),
-                                ),
-                              ],
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => NewComplainUI()));
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(5),
+                            elevation: 10,
+                            shadowColor: const Color(0xffF6EACB),
+                            child: Container(
+                              height: _height * 0.06,
+                              width: _width * 0.4,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffF6EACB),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: _width * 0.03,
+                                  ),
+                                  Image.asset(
+                                    'assets/complaint.png',
+                                    color: Colors.red,
+                                    height: _height * 0.03,
+                                  ),
+                                  const VerticalDivider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                  ),
+                                  // SizedBox(width: 20,),
+                                  Text(
+                                    'New Complain',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: _height * 0.014),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -362,18 +372,18 @@ class _LoginUIState extends State<LoginUI> {
                                 Image.asset(
                                   'assets/customer-ratings.png',
                                   color: Colors.red,
-                                  height: 30,
+                                  height: _height * 0.03,
                                 ),
                                 const VerticalDivider(
                                   color: Colors.grey,
                                   thickness: 1,
                                 ),
                                 // SizedBox(width: 20,),
-                                const Text(
+                                Text(
                                   'Complain Status',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 12),
+                                      fontSize: _height * 0.014),
                                 ),
                               ],
                             ),
@@ -384,15 +394,15 @@ class _LoginUIState extends State<LoginUI> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 40,
+              SizedBox(
+                height: _height * 0.08,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/CrystalSolutionslogo.png',
-                    height: 30,
+                    height: _height * 0.04,
                   ),
                   const SizedBox(
                     width: 5,
@@ -401,31 +411,33 @@ class _LoginUIState extends State<LoginUI> {
                     children: [
                       RichText(
                           text: TextSpan(children: [
-                        TextSpan(
-                            text: "Powered by ",
-                            style: TextStyle(color: ColorsUtils.blackColor)),
-                        TextSpan(
-                            text: "Crystal ",
-                            style: TextStyle(
-                                color: ColorsUtils.blueCrystal,
-                                fontWeight: FontWeight.bold)),
-                        TextSpan(
-                            text: "Solutions",
-                            style: TextStyle(
-                                color: ColorsUtils.orangeCrystal,
-                                fontWeight: FontWeight.bold)),
-                      ])),
+                            TextSpan(
+                                text: "Powered by ",
+                                style: TextStyle(
+                                    color: ColorsUtils.blackColor)),
+                            TextSpan(
+                                text: "Crystal ",
+                                style: TextStyle(
+                                    color: ColorsUtils.blueCrystal,
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: "Solutions",
+                                style: TextStyle(
+                                    color: ColorsUtils.orangeCrystal,
+                                    fontWeight: FontWeight.bold)),
+                          ])),
                       RichText(
                           text: TextSpan(children: [
-                        TextSpan(
-                            text: "Contact us: ",
-                            style: TextStyle(color: ColorsUtils.blackColor)),
-                        TextSpan(
-                            text: "+92 304 4770075",
-                            style: TextStyle(
-                                color: ColorsUtils.blueCrystal,
-                                fontWeight: FontWeight.bold)),
-                      ])),
+                            TextSpan(
+                                text: "Contact us: ",
+                                style: TextStyle(
+                                    color: ColorsUtils.blackColor)),
+                            TextSpan(
+                                text: "+92 304 4770075",
+                                style: TextStyle(
+                                    color: ColorsUtils.blueCrystal,
+                                    fontWeight: FontWeight.bold)),
+                          ])),
                     ],
                   ),
                 ],
@@ -446,51 +458,51 @@ class _LoginUIState extends State<LoginUI> {
       return;
     }
 
-      var response = await http.post(Uri.parse(login), body: {
-        'userid': _emailController.text.trim(),
-        'password': _passwordController.text.trim(),
-        'token': _token,
-      });
+    var response = await http.post(Uri.parse(login), body: {
+      'userid': _emailController.text.trim(),
+      'password': _passwordController.text.trim(),
+      'token': _token,
+    });
 
-      if (response.statusCode == 200) {
-        // print('<----------->$_token');
-        var result = jsonDecode(response.body);
-        loginModelList = LoginModel.fromJson(result);
+    if (response.statusCode == 200) {
+      // print('<----------->$_token');
+      var result = jsonDecode(response.body);
+      loginModelList = LoginModel.fromJson(result);
 
-        if (loginModelList?.user?.tusrid == _emailController.text.trim() &&
-            loginModelList?.user?.tusrpwd == _passwordController.text.trim()) {
-          Shared_pref.saveuser(loginModelList!.user!);
+      if (loginModelList?.user?.tusrid == _emailController.text.trim() &&
+          loginModelList?.user?.tusrpwd == _passwordController.text.trim()) {
+        Shared_pref.saveuser(loginModelList!.user!);
 
-          if (loginModelList?.user?.tusrtyp == 'Technician') {
-            var sharedPref = await SharedPreferences.getInstance();
-            sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
-            sharedPref.setString('userType', 'Technician');
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const DashboardUI()),
-              (Route<dynamic> route) => false,
-            );
-            Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
-          } else if (loginModelList?.user?.tusrtyp == 'Admin') {
-            var sharedPref = await SharedPreferences.getInstance();
-            sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
-            sharedPref.setString('userType', 'Admin');
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const AdminDashboardUI()),
-              (Route<dynamic> route) => false,
-            );
-            Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
-          }
-        } else {
-          _emailController.clear();
-          _passwordController.clear();
-          Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
-          Navigator.pop(context);
+        if (loginModelList?.user?.tusrtyp == 'Technician') {
+          var sharedPref = await SharedPreferences.getInstance();
+          sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+          sharedPref.setString('userType', 'Technician');
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardUI()),
+                (Route<dynamic> route) => false,
+          );
+          Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
+        } else if (loginModelList?.user?.tusrtyp == 'Admin') {
+          var sharedPref = await SharedPreferences.getInstance();
+          sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
+          sharedPref.setString('userType', 'Admin');
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminDashboardUI()),
+                (Route<dynamic> route) => false,
+          );
+          Snackbar.showSnackBar(context, 'Login Successful', Colors.teal);
         }
       } else {
-        Snackbar.showSnackBar(context, 'Login Failed', Colors.red);
+        _emailController.clear();
+        _passwordController.clear();
+        Snackbar.showSnackBar(context, 'Wrong Credentials', Colors.red);
         Navigator.pop(context);
       }
+    } else {
+      Snackbar.showSnackBar(context, 'Login Failed', Colors.red);
+      Navigator.pop(context);
+    }
   }
 }

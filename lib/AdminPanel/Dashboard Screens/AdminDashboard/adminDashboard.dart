@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:al_makkah/AdminPanel/Dashboard%20Screens/InstalledJobs/installedComplains.dart';
 import 'package:al_makkah/Models/JobStatus/JobStatusModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,8 +11,10 @@ import '../../../Models/TechnicianComparison/TechnicianComparisonModel.dart';
 import '../../../SplashScreen/splashScreen.dart';
 import '../../../Utilities/Colors/colors.dart';
 import '../AdminDrawer/adminDrawerUi.dart';
+import '../ClosedJobs/closedJobs.dart';
+import '../DoneJobs/doneComplains.dart';
 import '../PendingJobs/pendingComplains.dart';
-import '../TechnicianInfo/InstalledComplains.dart';
+import '../TechnicianInfo/doneComplains.dart';
 import '../TechnicianInfo/pendingComplains.dart';
 import '../UnassignedJobs/unassignedComplains.dart';
 
@@ -209,7 +210,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          InstalledCustomersUI()));
+                                          DoneCustomersUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -235,7 +236,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     Container(
                                       width: _width * 0.22,
                                       child: Text(
-                                        'Installed',
+                                        'Done',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: _height * 0.017),
@@ -249,7 +250,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                       width: _width * 0.177,
                                       child: Text(
                                         jobStatusList[index]
-                                            .installed
+                                            .done
                                             .toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
@@ -264,7 +265,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           ),
                           InkWell(
                             onTap: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context)=> ClosedInstallationUI()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> ClosedJobsUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -399,7 +400,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           Text("P",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
                           SizedBox(width: _width * 0.11,),
 
-                          Text("I",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
+                          Text("OK",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
                         ],
                       ),
 
@@ -542,7 +543,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: _width * 0.47,
+                                      width: _width * 0.445,
                                       child: Text(
                                         '   ${technicianComparisonList[index].name.toString().trim()}',
                                         style: TextStyle(fontSize: _height * 0.018),
@@ -553,24 +554,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                       color: Colors.white,
                                     ),
                                     Container(
-                                      width: _width * 0.1,
-                                      child: Text(
-                                        technicianComparisonList[index]
-                                            .assigned
-                                            .toString()
-                                            .trim(),
-                                        textAlign: TextAlign.center,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: _height * 0.025),
-                                      ),
-                                    ),
-                                    const VerticalDivider(
-                                      color: Colors.white,
-                                    ),
-                                    Container(
-                                      width: _width * 0.1,
+                                      width: _width * 0.18,
                                       child: Text(
                                         technicianComparisonList[index]
                                             .pending
@@ -590,7 +574,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                       width: _width * 0.1,
                                       child: Text(
                                         technicianComparisonList[index]
-                                            .installed
+                                            .done
                                             .toString()
                                             .trim(),
                                         textAlign: TextAlign.center,
@@ -691,13 +675,13 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => InstalledComplainsUI(
+                                    builder: (context) => DoneComplainsUI(
                                           technicianComparison: model,
                                         )));
                           },
                           child:  ListTile(
                             leading: Icon(Icons.input, size: _height* 0.03,),
-                            title: Text("Installed Complains",style: TextStyle(fontSize: _height * 0.02),),
+                            title: Text("Done Complains",style: TextStyle(fontSize: _height * 0.02),),
                             // subtitle: Text("Customer CMP: ${model.cmp}"),
                           ),
                         ),

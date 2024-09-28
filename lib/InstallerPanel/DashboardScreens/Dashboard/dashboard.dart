@@ -8,7 +8,7 @@ import '../../../LoginPages/loginscreen.dart';
 import '../../../Models/TechnicianStatus/TechnicianStatusModel.dart';
 import '../../../SplashScreen/splashScreen.dart';
 import '../../../Utilities/Colors/colors.dart';
-import '../Installed/installed.dart';
+import '../DoneInstallations/done.dart';
 import '../Pending/pending.dart';
 
 class DashboardUI extends StatefulWidget {
@@ -31,11 +31,11 @@ class _DashboardUIState extends State<DashboardUI> {
 
   @override
   Widget build(BuildContext context) {
-    var h = MediaQuery
+    var _height = MediaQuery
         .of(context)
         .size
         .height;
-    var w = MediaQuery
+    var _width = MediaQuery
         .of(context)
         .size
         .width;
@@ -73,7 +73,7 @@ class _DashboardUIState extends State<DashboardUI> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => PendingUI()));
+                                      builder: (context) => PendingUI())).then((value)=>post_TechnicianStatus());
                             },
                             child: Material(
                               elevation: 5,
@@ -81,12 +81,12 @@ class _DashboardUIState extends State<DashboardUI> {
                               // surfaceTintColor: Colors.blue,
                               shadowColor: Colors.white,
                               child: Container(
-                                height: h * 0.15,
-                                width: w * 0.3,
+                                height: _height * 0.15,
+                                width: _width * 0.3,
                                 child: Column(
                                   children: [
                                     Container(
-                                      height: h * 0.05,
+                                      height: _height * 0.05,
                                       decoration: BoxDecoration(
                                           color: ColorsUtils.baigeColor,
                                           borderRadius: const BorderRadius.only(
@@ -98,14 +98,14 @@ class _DashboardUIState extends State<DashboardUI> {
                                         child: Text(
                                           'Pending',
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: _height * 0.02,
                                               color: ColorsUtils.whiteColor,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                     Container(
-                                      height: h * 0.1,
+                                      height: _height * 0.1,
                                       decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.only(
                                               bottomRight: Radius.circular(5),
@@ -125,7 +125,7 @@ class _DashboardUIState extends State<DashboardUI> {
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(
-                                                fontSize: 53,
+                                                fontSize: _height * 0.07,
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.grey.shade400),
                                           )),
@@ -140,7 +140,7 @@ class _DashboardUIState extends State<DashboardUI> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => InstalledUI()));
+                                      builder: (context) => DoneUI())).then((value)=>post_TechnicianStatus());
                             },
                             child: Material(
                               elevation: 5,
@@ -148,12 +148,12 @@ class _DashboardUIState extends State<DashboardUI> {
                               // surfaceTintColor: Colors.blue,
                               shadowColor: Colors.white,
                               child: Container(
-                                height: h * 0.15,
-                                width: w * 0.3,
+                                height: _height * 0.15,
+                                width: _width * 0.3,
                                 child: Column(
                                   children: [
                                     Container(
-                                      height: h * 0.05,
+                                      height: _height * 0.05,
                                       decoration: BoxDecoration(
                                           color: ColorsUtils.baigeColor,
                                           borderRadius: const BorderRadius.only(
@@ -163,16 +163,17 @@ class _DashboardUIState extends State<DashboardUI> {
                                               color: ColorsUtils.greyColor)),
                                       child: Center(
                                         child: Text(
-                                          'Installed',
+                                          'Done',
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: _height * 0.02,
+
                                               color: ColorsUtils.whiteColor,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ),
                                     Container(
-                                      height: h * 0.1,
+                                      height: _height * 0.1,
                                       decoration: BoxDecoration(
                                           borderRadius: const BorderRadius.only(
                                               bottomRight: Radius.circular(5),
@@ -182,17 +183,18 @@ class _DashboardUIState extends State<DashboardUI> {
                                       child: Center(
                                           child: Text(
                                             technicianStatusList[index]
-                                                .installed
+                                                .done
                                                 .toString()
                                                 .trim() ==
                                                 'null'
                                                 ? '0'
                                                 : technicianStatusList[index]
-                                                .installed
+                                                .done
                                                 .toString()
                                                 .trim(),
                                             style: TextStyle(
-                                                fontSize: 53,
+                                                fontSize: _height * 0.07,
+
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.grey.shade400),
                                           )),
@@ -208,12 +210,12 @@ class _DashboardUIState extends State<DashboardUI> {
                             // surfaceTintColor: Colors.blue,
                             shadowColor: Colors.white,
                             child: Container(
-                              height: h * 0.15,
-                              width: w * 0.3,
+                              height: _height * 0.15,
+                              width: _width * 0.3,
                               child: Column(
                                 children: [
                                   Container(
-                                    height: h * 0.05,
+                                    height: _height * 0.05,
                                     decoration: BoxDecoration(
                                         color: ColorsUtils.baigeColor,
                                         borderRadius: const BorderRadius.only(
@@ -225,14 +227,15 @@ class _DashboardUIState extends State<DashboardUI> {
                                       child: Text(
                                         'Closed',
                                         style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: _height * 0.02,
+
                                             color: ColorsUtils.whiteColor,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
                                   Container(
-                                    height: h * 0.1,
+                                    height: _height * 0.1,
                                     decoration: BoxDecoration(
                                         borderRadius: const BorderRadius.only(
                                             bottomRight: Radius.circular(5),
@@ -252,7 +255,7 @@ class _DashboardUIState extends State<DashboardUI> {
                                               .toString()
                                               .trim(),
                                           style: TextStyle(
-                                              fontSize: 53,
+                                              fontSize: _height * 0.07,
                                               fontWeight: FontWeight.w500,
                                               color: Colors.grey.shade400),
                                         )),

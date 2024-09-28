@@ -11,18 +11,18 @@ import '../../../../Models/Installed/InstalledTechnicianJobModel.dart';
 import '../../../../Models/UnassignedJobs/UnAssignedJobsModel.dart';
 import '../../../../Utilities/Colors/colors.dart';
 
-class InstalledCustomerDetail extends StatefulWidget {
+class DoneCustomerDetail extends StatefulWidget {
   InstalledTechnicianJobModel installedModel;
 
 
-  InstalledCustomerDetail({super.key, required this.installedModel});
+  DoneCustomerDetail({super.key, required this.installedModel});
 
   @override
-  State<InstalledCustomerDetail> createState() =>
-      _InstalledCustomerDetailState();
+  State<DoneCustomerDetail> createState() =>
+      _DoneCustomerDetailState();
 }
 
-class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
+class _DoneCustomerDetailState extends State<DoneCustomerDetail> {
   List<JobInfoModel> jobsInfoList = [];
   final translator = GoogleTranslator();
   bool _translatetext = false;
@@ -1003,34 +1003,42 @@ class _InstalledCustomerDetailState extends State<InstalledCustomerDetail> {
                                             child: Flexible(
                                           child: Text(
                                             jobsInfoList[index]
-                                                        .tjobsts
-                                                        .toString() ==
-                                                    'N'
-                                                ? 'Pending'
+                                                .tjobsts
+                                                .toString() ==
+                                                'C'
+                                                ? 'Canceled'
                                                 : jobsInfoList[index]
-                                                            .tjobsts
-                                                            .toString() ==
-                                                        'I'
-                                                    ? 'Installed'
-                                                    : jobsInfoList[index]
-                                                                .tjobsts
-                                                                .toString() ==
-                                                            'P'
-                                                        ? 'Pending'
-                                                        : jobsInfoList[index]
-                                                                    .tjobsts
-                                                                    .toString() ==
-                                                                ''
-                                                            ? 'UnAssigned'
-                                                            : jobsInfoList[index]
-                                                                        .tjobsts
-                                                                        .toString() ==
-                                                                    'null'
-                                                                ? 'UnAssigned'
-                                                                : jobsInfoList[
-                                                                        index]
-                                                                    .tjobsts
-                                                                    .toString(),
+                                                .tjobsts
+                                                .toString() ==
+                                                'W'
+                                                ? 'Work Shop'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'S'
+                                                ? 'Closed'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'N'
+                                                ? 'Un Assigned'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'D'
+                                                ? 'Done'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'P'
+                                                ? 'Pending'
+                                                : jobsInfoList[index].tjobsts.toString() ==
+                                                ''
+                                                ? 'UnAssigned'
+                                                : jobsInfoList[index].tjobsts.toString() ==
+                                                'null'
+                                                ? 'UnAssigned'
+                                                : jobsInfoList[index].tjobsts.toString(),
                                             style: TextStyle(
                                                 color: ColorsUtils.redColor,
                                                 fontSize: 20,

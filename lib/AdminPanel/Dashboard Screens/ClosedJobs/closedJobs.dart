@@ -1,31 +1,30 @@
 import 'dart:convert';
 
-import 'package:al_makkah/AdminPanel/Dashboard%20Screens/UnassignedJobs/unassignedCustomerDetails.dart';
+import 'package:al_makkah/AdminPanel/Dashboard%20Screens/ClosedJobs/closedCustomerDetails.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart'as http;
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart'as http;
 import '../../../APIs/apis.dart';
-import '../../../Models/UnassignedJobs/UnAssignedJobsModel.dart';
+import '../../../Models/ClosedJobs/GetClosedJobsModel.dart';
 import '../../../Utilities/Colors/colors.dart';
 
-class UnassignedComplainsUI extends StatefulWidget {
-  const UnassignedComplainsUI({super.key});
+class ClosedJobsUI extends StatefulWidget {
+  const ClosedJobsUI({super.key});
 
   @override
-  State<UnassignedComplainsUI> createState() => _UnassignedComplainsUIState();
+  State<ClosedJobsUI> createState() => _ClosedJobsUIState();
 }
 
-class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
-  List<UnAssignedJobsModel> unAssignedJobList = [];
-  List<UnAssignedJobsModel> searchUnssignedList = [];
+class _ClosedJobsUIState extends State<ClosedJobsUI> {
+  List<GetClosedJobsModel> closeJobList = [];
+  List<GetClosedJobsModel> searchCloseList = [];
   bool loading = true;
-
 
   @override
   void initState() {
     super.initState();
-    Post_InstalledTechnicianJob();
+    Post_GetClosedJobs();
   }
 
   @override
@@ -33,7 +32,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'UnAssigned Applications',
+          'Closed Applications',
           style: TextStyle(color: ColorsUtils.whiteColor),
         ),
         backgroundColor: ColorsUtils.baigeColor,
@@ -42,7 +41,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
         child: RefreshIndicator(
-          onRefresh: Post_InstalledTechnicianJob,
+          onRefresh: Post_GetClosedJobs,
           child: Column(
             children: [
               TextField(
@@ -63,8 +62,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
               Expanded(
                 child: loading
                     ? Center(child: CircularProgressIndicator())
-                    : searchUnssignedList
-                    .isEmpty
+                    : searchCloseList.isEmpty
                     ? Center(
                     child: Text(
                       "No Application is Installed",
@@ -74,7 +72,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                           color: Colors.grey),
                     ))
                     : ListView.builder(
-                    itemCount: searchUnssignedList.length,
+                    itemCount: searchCloseList.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
@@ -83,7 +81,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                             isScrollControlled: true,
                             backgroundColor: Colors.transparent,
                             builder: (context) => _buildBottomSheet(
-                                context, searchUnssignedList[index]),
+                                context, searchCloseList[index]),
                           );
                         },
                         child: Card(
@@ -97,7 +95,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                                 Row(
                                   children: [
                                     Text(
-                                      searchUnssignedList[index]
+                                      searchCloseList[index]
                                           .tjobnum
                                           .toString(),
                                       style: const TextStyle(
@@ -112,7 +110,11 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                                           fontWeight: FontWeight.w500),
                                     ),
                                     Text(
-                                      DateFormat('dd-MM-yyyy').format(DateTime.parse(searchUnssignedList[index].tjobdat.toString())),
+                                      DateFormat('dd-MM-yyyy').format(
+                                          DateTime.parse(
+                                              searchCloseList[index]
+                                                  .tjobdat
+                                                  .toString())),
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500),
@@ -120,7 +122,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                                   ],
                                 ),
                                 Text(
-                                  searchUnssignedList[index]
+                                  searchCloseList[index]
                                       .tcstnam
                                       .toString(),
                                   style: const TextStyle(
@@ -128,7 +130,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                                   ),
                                 ),
                                 Text(
-                                  searchUnssignedList[index]
+                                  searchCloseList[index]
                                       .tmobnum
                                       .toString(),
                                   style: const TextStyle(
@@ -149,7 +151,7 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
     );
   }
 
-  Widget _buildBottomSheet(BuildContext context, UnAssignedJobsModel model) {
+  Widget _buildBottomSheet(BuildContext context, GetClosedJobsModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -214,8 +216,9 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        UnassignedCustomerDetails(
-                                          unAssignedJobsModel: model,)));
+                                        ClosedCustomerDetails(
+                                          closedJobsListModel: model,
+                                        )));
                           },
                           child: const ListTile(
                             leading: Icon(Icons.info),
@@ -250,19 +253,19 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
     );
   }
 
-  Future Post_InstalledTechnicianJob() async {
-    var response = await http.get(Uri.parse(GetUnassignedJobs));
+  Future Post_GetClosedJobs() async {
+    var response = await http.get(Uri.parse(GetClosedJobs));
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
       setState(() {
         loading = false;
       });
-      unAssignedJobList.clear();
+      closeJobList.clear();
       for (Map i in result) {
-        unAssignedJobList.add(UnAssignedJobsModel.fromJson(i));
+        closeJobList.add(GetClosedJobsModel.fromJson(i));
       }
       setState(() {
-        searchUnssignedList = List.from(unAssignedJobList);
+        searchCloseList = List.from(closeJobList);
       });
     } else {
       setState(() {
@@ -271,10 +274,9 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
     }
   }
 
-
   void search(String query) {
     setState(() {
-      searchUnssignedList = unAssignedJobList.where((category) {
+      searchCloseList = closeJobList.where((category) {
         final customerNameMatches =
             category.tcstnam?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
@@ -282,7 +284,8 @@ class _UnassignedComplainsUIState extends State<UnassignedComplainsUI> {
             category.tmobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
         final complainNumberMatches =
-            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ?? false;
+            category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ??
+                false;
         return customerNameMatches ||
             mobileNumberMatches ||
             complainNumberMatches;

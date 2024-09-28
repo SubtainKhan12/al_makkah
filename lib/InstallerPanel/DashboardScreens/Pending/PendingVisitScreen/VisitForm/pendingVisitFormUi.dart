@@ -26,13 +26,18 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
   TextEditingController _itemController = TextEditingController();
   TextEditingController _remarkController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
+  TextEditingController _partsAmountController = TextEditingController();
+  TextEditingController _jobAmountController = TextEditingController();
   DateTime? _dateTime;
   var cdate = DateFormat("dd-MM-yyyy").format(DateTime.now());
   DateTime cdate1 = DateTime.now();
 
   // DateTime selectedInitialDate = DateTime.now();
-  String? status = 'Not Installed';
+  String? status = 'Pending';
+  String? warranty;
   File? _image;
+
+
 
   @override
   void initState() {
@@ -264,7 +269,6 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                 controller: _itemController,
                 decoration: InputDecoration(
                   labelText: "Item",
-                  labelStyle: TextStyle(color: ColorsUtils.appcolor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(3),
                   ),
@@ -301,8 +305,10 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                   });
                 },
                 items: <String>[
-                  'Not Installed',
-                  'Installed',
+                  'Pending',
+                  'Done',
+                  'WorkShop',
+                  'Cancel',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -323,6 +329,84 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
             ),
             SizedBox(
               height: 10,
+            ),
+            Container(
+              // width: MediaQuery.of(context).size.width / 0.3,
+              // height: MediaQuery.of(context).size.height / 16,
+              child: TextField(
+                keyboardType: TextInputType.numberWithOptions(),
+                controller: _partsAmountController,
+                decoration: InputDecoration(
+                  labelText: "Parts Amount",
+                  alignLabelWithHint: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  // floatingLabelBehavior: FloatingLabelBehavior.always, // Keeps label at the top
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              // width: MediaQuery.of(context).size.width / 0.3,
+              // height: MediaQuery.of(context).size.height / 16,
+              child: TextField(
+                keyboardType: TextInputType.numberWithOptions(),
+                controller: _jobAmountController,
+                decoration: InputDecoration(
+                  labelText: "Job Amount",
+                  alignLabelWithHint: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  // floatingLabelBehavior: FloatingLabelBehavior.always, // Keeps label at the top
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  const Text(
+                    'Warranty:',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(width: _width * 0.04,),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Yes'),
+                      value: 'YES',
+                      groupValue: warranty,
+                      // contentPadding: EdgeInsets.symmetric(horizontal: -20), // Adjust padding here
+                      onChanged: (String? value) {
+                        setState(() {
+                          warranty = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text(
+                        'No',
+                      ),
+                      value: 'NO',
+                      groupValue: warranty,
+                      // contentPadding: EdgeInsets.symmetric(horizontal: -20), // Adjust padding here
+                      onChanged: (String? value) {
+                        setState(() {
+                          warranty = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
             Container(
               // width: MediaQuery.of(context).size.width / 0.3,
@@ -448,6 +532,7 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
     String formattedDate = DateFormat("dd-MM-yyyy").format(cdate1);
     _itemController.text = widget.getJobInfo.titmdsc.toString().trim() ?? '0';
     _dateController.text = formattedDate;
+    warranty = widget.getJobInfo.twrnsts.toString().trim() ?? '0';
   }
 
   Future<void> _intSelectDate(
@@ -473,6 +558,11 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
     request.fields['FItmSer'] = _serialController.text;
     request.fields['FVstRem'] = _remarkController.text;
     request.fields['FVstDat'] = cdate1.toString();
+    request.fields['FPrtAmt'] = _partsAmountController.text;
+    request.fields['FJobAmt'] = _jobAmountController.text;
+    request.fields['FWrnSts'] = warranty.toString();
+    request.fields['FwdDat'] = widget.getJobInfo.tfwddat.toString();
+    request.fields['FTchCod'] = widget.getJobInfo.ttchcod.toString();
 
     if (_image != null) {
       var picture = await http.MultipartFile.fromPath('VstImg', _image!.path);

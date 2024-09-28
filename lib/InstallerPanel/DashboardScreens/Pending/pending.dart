@@ -64,12 +64,18 @@ class _PendingUIState extends State<PendingUI> {
                 ),
               ),
               Expanded(
-                child: loading// Show loader if loading is true
+                child: loading // Show loader if loading is true
                     ? const Center(child: CircularProgressIndicator())
                     : searchPendingList
                             .isEmpty // Show message if no data is available
-                        ? const Center(child: Text("No applications are pending",style: TextStyle(fontSize: 16,fontWeight:
-                FontWeight.bold,color: Colors.grey),))
+                        ? const Center(
+                            child: Text(
+                            "No applications are pending",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          ))
                         : ListView.builder(
                             itemCount: searchPendingList.length,
                             itemBuilder: (context, index) {
@@ -79,9 +85,8 @@ class _PendingUIState extends State<PendingUI> {
                                     context: context,
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
-                                    builder: (context) =>
-                                        _buildBottomSheet(
-                                            context, searchPendingList[index]),
+                                    builder: (context) => _buildBottomSheet(
+                                        context, searchPendingList[index]),
                                   );
                                 },
                                 child: Card(
@@ -110,10 +115,12 @@ class _PendingUIState extends State<PendingUI> {
                                                   fontWeight: FontWeight.w500),
                                             ),
                                             Text(
-                                              DateFormat('dd-MM-yyyy').format(DateTime.parse(searchPendingList[index]
-                                                  .tjobdat
-                                                  .toString(),)),
-
+                                              DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                searchPendingList[index]
+                                                    .tjobdat
+                                                    .toString(),
+                                              )),
                                               style: const TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w500),
@@ -150,7 +157,8 @@ class _PendingUIState extends State<PendingUI> {
     );
   }
 
-  Widget _buildBottomSheet(BuildContext context, TechnicianPendingJobsModel model) {
+  Widget _buildBottomSheet(
+      BuildContext context, TechnicianPendingJobsModel model) {
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -186,14 +194,12 @@ class _PendingUIState extends State<PendingUI> {
                         ),
                         const SizedBox(height: 8),
                         InkWell(
-                          onTap: (){
-                            _showPhoneDialog(
-                                model.tmobnum.toString());
+                          onTap: () {
+                            _showPhoneDialog(model.tmobnum.toString());
                           },
                           child: Text(
                             model.tmobnum.toString(),
-
-                            style:  TextStyle(
+                            style: TextStyle(
                               decoration: TextDecoration.underline,
                               decorationColor: ColorsUtils.appcolor,
                               decorationThickness: 2,
@@ -216,9 +222,8 @@ class _PendingUIState extends State<PendingUI> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        PendingCustomerDetail(
-                                            pendingModel: model)));
+                                    builder: (context) => PendingCustomerDetail(
+                                        pendingModel: model))).then((value)=>Post_TechnicianPending());
                           },
                           child: const ListTile(
                             leading: Icon(Icons.info),
@@ -227,12 +232,13 @@ class _PendingUIState extends State<PendingUI> {
                           ),
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PendingVisitScreen(technicalPendingModel: model,)));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PendingVisitScreen(
+                                          technicalPendingModel: model,
+                                        )));
                           },
                           child: const ListTile(
                             leading: Icon(Icons.location_on),
@@ -264,10 +270,9 @@ class _PendingUIState extends State<PendingUI> {
       pendingTechnicianJobList.clear();
       for (Map i in result) {
         pendingTechnicianJobList.add(TechnicianPendingJobsModel.fromJson(i));
-
       }
       setState(() {
-         // Update loading state once data is fetched
+        // Update loading state once data is fetched
         searchPendingList = List.from(pendingTechnicianJobList);
       });
     } else {
@@ -296,7 +301,9 @@ class _PendingUIState extends State<PendingUI> {
         final complainNumberMatches =
             category.tjobnum?.toLowerCase().contains(query.toLowerCase()) ??
                 false;
-        return customerNameMatches || mobileNumberMatches || complainNumberMatches;
+        return customerNameMatches ||
+            mobileNumberMatches ||
+            complainNumberMatches;
       }).toList();
     });
   }
@@ -313,16 +320,17 @@ class _PendingUIState extends State<PendingUI> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.phone,
-                  size: _height * 0.04,
-                  color: const Color(0xff06D001)),
+                  size: _height * 0.04, color: const Color(0xff06D001)),
               onPressed: () {
                 _makePhoneCall(phoneNumber);
                 Navigator.of(context).pop();
               },
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 _openWhatsApp(phoneNumber);
                 Navigator.of(context).pop();
               },
@@ -363,4 +371,3 @@ class _PendingUIState extends State<PendingUI> {
     }
   }
 }
-

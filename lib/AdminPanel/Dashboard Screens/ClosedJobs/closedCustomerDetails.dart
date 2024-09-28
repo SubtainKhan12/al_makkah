@@ -6,19 +6,20 @@ import 'package:intl/intl.dart';
 import 'package:translator/translator.dart';
 import 'package:http/http.dart'as http;
 import '../../../APIs/apis.dart';
+import '../../../Models/ClosedJobs/GetClosedJobsModel.dart';
 import '../../../Models/GetJobInfo/JobInfoModel.dart';
-import '../../../Models/InstalledJobs/InstalledJobsModel.dart';
+
 import '../../../Utilities/Colors/colors.dart';
 
-class InstalledCustomerDetails extends StatefulWidget {
-  InstalledJobsModel installedJobsModel;
-   InstalledCustomerDetails({super.key,required this.installedJobsModel});
+class ClosedCustomerDetails extends StatefulWidget {
+  GetClosedJobsModel closedJobsListModel;
+  ClosedCustomerDetails({super.key,required this.closedJobsListModel});
 
   @override
-  State<InstalledCustomerDetails> createState() => _InstalledCustomerDetailsState();
+  State<ClosedCustomerDetails> createState() => _ClosedCustomerDetailsState();
 }
 
-class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
+class _ClosedCustomerDetailsState extends State<ClosedCustomerDetails> {
   List<JobInfoModel> jobsInfoList = [];
   final translator = GoogleTranslator();
   bool _translatetext = false;
@@ -1003,14 +1004,27 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
                                           child: Text(
                                             jobsInfoList[index]
                                                 .tjobsts
+                                                .toString() == 'C'?'Canceled':
+                                            jobsInfoList[index]
+                                                .tjobsts
                                                 .toString() ==
-                                                'N'
-                                                ? 'Pending'
+                                                'W'
+                                                ? 'Work Shop'
                                                 : jobsInfoList[index]
                                                 .tjobsts
                                                 .toString() ==
-                                                'I'
-                                                ? 'Installed'
+                                                'S'
+                                                ? 'Closed'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'N'
+                                                ? 'Un Assigned'
+                                                : jobsInfoList[index]
+                                                .tjobsts
+                                                .toString() ==
+                                                'D'
+                                                ? 'Done'
                                                 : jobsInfoList[index]
                                                 .tjobsts
                                                 .toString() ==
@@ -1021,13 +1035,10 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
                                                 .toString() ==
                                                 ''
                                                 ? 'UnAssigned'
-                                                : jobsInfoList[index]
-                                                .tjobsts
-                                                .toString() ==
+                                                : jobsInfoList[index].tjobsts.toString() ==
                                                 'null'
                                                 ? 'UnAssigned'
-                                                : jobsInfoList[
-                                            index]
+                                                : jobsInfoList[index]
                                                 .tjobsts
                                                 .toString(),
                                             style: TextStyle(
@@ -1138,7 +1149,7 @@ class _InstalledCustomerDetailsState extends State<InstalledCustomerDetails> {
 
   Future Post_GetJobInfo() async {
     var response = await http.post(Uri.parse(GetJobInfo), body: {
-      'FJobNum': widget.installedJobsModel.tjobnum.toString(),
+      'FJobNum': widget.closedJobsListModel.tjobnum.toString(),
     });
     var result = jsonDecode(response.body);
     if (response.statusCode == 200) {
