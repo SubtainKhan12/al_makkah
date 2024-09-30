@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:al_makkah/Models/JobStatus/JobStatusModel.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../APIs/apis.dart';
@@ -14,6 +15,7 @@ import '../AdminDrawer/adminDrawerUi.dart';
 import '../ClosedJobs/closedJobs.dart';
 import '../DoneJobs/doneComplains.dart';
 import '../PendingJobs/pendingComplains.dart';
+import '../TechnicianInfo/TechnicianCollection/technicianCollection.dart';
 import '../TechnicianInfo/doneComplains.dart';
 import '../TechnicianInfo/pendingComplains.dart';
 import '../UnassignedJobs/unassignedComplains.dart';
@@ -30,6 +32,12 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
   List<TechnicianComparisonModel> technicianComparisonList = [];
   List<DailyComparisonModel> dailyComparisonList = [];
   String? name;
+  final numberFormat = NumberFormat('#,###');
+
+  String formatCollection(String amount) {
+    final doubleAmount = double.tryParse(amount) ?? 0.00;
+    return numberFormat.format(doubleAmount);
+  }
 
   @override
   void initState() {
@@ -49,7 +57,8 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
         appBar: AppBar(
           title: Text(
             'Hello ${name.toString().trim()}',
-            style: TextStyle(color: ColorsUtils.whiteColor,fontSize: _height * 0.025),
+            style: TextStyle(
+                color: ColorsUtils.whiteColor, fontSize: _height * 0.025),
           ),
           backgroundColor: ColorsUtils.baigeColor,
           iconTheme: IconThemeData(color: ColorsUtils.whiteColor),
@@ -58,14 +67,17 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                 onPressed: () {
                   logout();
                 },
-                icon:  Icon(Icons.logout, size: _height * 0.025,)),
+                icon: Icon(
+                  Icons.logout,
+                  size: _height * 0.025,
+                )),
           ],
         ),
         drawer: AdminDrawerUI(),
         body: RefreshIndicator(
           onRefresh: () async {
             get_JobStatus();
-            get_JobStatus();
+            get_TechnicianComparison();
             post_DailyComparison();
           },
           child: ListView.builder(
@@ -129,7 +141,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                             .unassigned
                                             .toString(),
                                         textAlign: TextAlign.center,
-                                        style:  TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: _height * 0.026),
                                       ),
@@ -209,8 +221,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          DoneCustomersUI()));
+                                      builder: (context) => DoneCustomersUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -249,9 +260,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     Container(
                                       width: _width * 0.177,
                                       child: Text(
-                                        jobStatusList[index]
-                                            .done
-                                            .toString(),
+                                        jobStatusList[index].done.toString(),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -265,7 +274,10 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           ),
                           InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=> ClosedJobsUI()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ClosedJobsUI()));
                             },
                             child: Material(
                               borderRadius: BorderRadius.circular(5),
@@ -393,17 +405,38 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 fontStyle: FontStyle.italic,
                                 color: ColorsUtils.redColor),
                           ),
-                          SizedBox(width: _width * 0.24,),
-                          Text("A",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
-                          SizedBox(width: _width * 0.11,),
-
-                          Text("P",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
-                          SizedBox(width: _width * 0.11,),
-
-                          Text("OK",style: TextStyle(fontSize: _height * 0.02,fontWeight: FontWeight.bold,color: Colors.red),),
+                          SizedBox(
+                            width: _width * 0.24,
+                          ),
+                          Text(
+                            "A",
+                            style: TextStyle(
+                                fontSize: _height * 0.02,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                          SizedBox(
+                            width: _width * 0.11,
+                          ),
+                          Text(
+                            "P",
+                            style: TextStyle(
+                                fontSize: _height * 0.02,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                          SizedBox(
+                            width: _width * 0.11,
+                          ),
+                          Text(
+                            "OK",
+                            style: TextStyle(
+                                fontSize: _height * 0.02,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
                         ],
                       ),
-
                       ListView.builder(
                         itemCount: dailyComparisonList.length,
                         shrinkWrap: true,
@@ -427,7 +460,8 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                     width: _width * 0.15,
                                     child: Text(
                                       '   ${dailyComparisonList[index].date.toString().trim()}',
-                                      style: TextStyle(fontSize: _height * 0.017),
+                                      style:
+                                          TextStyle(fontSize: _height * 0.017),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
@@ -505,14 +539,50 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                           );
                         },
                       ),
-                      Text(
-                        '  Technician info:',
-                        style: TextStyle(
-                            fontSize: _height * 0.022,
-
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FontStyle.italic,
-                            color: ColorsUtils.redColor),
+                      Row(
+                        children: [
+                          Text(
+                            '  Technician info:',
+                            style: TextStyle(
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: ColorsUtils.redColor),
+                          ),
+                          SizedBox(
+                            width: _width * 0.15,
+                          ),
+                          Text(
+                            'P',
+                            style: TextStyle(
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: ColorsUtils.redColor),
+                          ),
+                          SizedBox(
+                            width: _width * 0.08,
+                          ),
+                          Text(
+                            'Ok',
+                            style: TextStyle(
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: ColorsUtils.redColor),
+                          ),
+                          SizedBox(
+                            width: _width * 0.06,
+                          ),
+                          Text(
+                            'P Amt',
+                            style: TextStyle(
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: ColorsUtils.redColor),
+                          ),
+                        ],
                       ),
                       ListView.builder(
                         itemCount: technicianComparisonList.length,
@@ -529,7 +599,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 backgroundColor: Colors.transparent,
                                 builder: (context) => _buildBottomSheet(
                                     context, technicianComparisonList[index]),
-                              );
+                              ).then((value) => post_DailyComparison());
                             },
                             child: Card(
                               child: Container(
@@ -543,10 +613,11 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      width: _width * 0.445,
+                                      width: _width * 0.42,
                                       child: Text(
                                         '   ${technicianComparisonList[index].name.toString().trim()}',
-                                        style: TextStyle(fontSize: _height * 0.018),
+                                        style: TextStyle(
+                                            fontSize: _height * 0.018),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -554,7 +625,7 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                       color: Colors.white,
                                     ),
                                     Container(
-                                      width: _width * 0.18,
+                                      width: _width * 0.1,
                                       child: Text(
                                         technicianComparisonList[index]
                                             .pending
@@ -579,9 +650,30 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                             .trim(),
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.ellipsis,
-                                        style:  TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: _height * 0.025),
+                                      ),
+                                    ),
+                                    const VerticalDivider(
+                                      color: Colors.white,
+                                    ),
+                                    Container(
+                                      width: _width * 0.1,
+                                      child: Text(
+                                        formatCollection(
+                                          technicianComparisonList[index]
+                                              .amount
+                                              .toString()
+                                              .trim(),
+                                        ),
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: _height * 0.015),
                                       ),
                                     ),
                                   ],
@@ -600,8 +692,8 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
 
   Widget _buildBottomSheet(
       BuildContext context, TechnicianComparisonModel model) {
-    var _height  = MediaQuery.of(context).size.height;
-    var _width  = MediaQuery.of(context).size.width;
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
@@ -662,11 +754,17 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 MaterialPageRoute(
                                     builder: (context) => PendingComplainsUI(
                                           technicianComparison: model,
-                                        )));
+                                        ))).then((value) => post_DailyComparison());
                           },
                           child: ListTile(
-                            leading: Icon(Icons.pending,size: _height* 0.03,),
-                            title: Text("Pending Complains",style: TextStyle(fontSize: _height * 0.02),),
+                            leading: Icon(
+                              Icons.pending,
+                              size: _height * 0.03,
+                            ),
+                            title: Text(
+                              "Pending Complains",
+                              style: TextStyle(fontSize: _height * 0.02),
+                            ),
                             // subtitle: Text("Customer CMP: ${model.cmp}"),
                           ),
                         ),
@@ -677,11 +775,40 @@ class _AdminDashboardUIState extends State<AdminDashboardUI> {
                                 MaterialPageRoute(
                                     builder: (context) => DoneComplainsUI(
                                           technicianComparison: model,
-                                        )));
+                                        ))).then((value) => post_DailyComparison());
                           },
-                          child:  ListTile(
-                            leading: Icon(Icons.input, size: _height* 0.03,),
-                            title: Text("Done Complains",style: TextStyle(fontSize: _height * 0.02),),
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.input,
+                              size: _height * 0.03,
+                            ),
+                            title: Text(
+                              "Done Complains",
+                              style: TextStyle(fontSize: _height * 0.02),
+                            ),
+                            // subtitle: Text("Customer CMP: ${model.cmp}"),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TechnicianCollectionUI(
+                                              technicianComparison: model,
+                                            )))
+                                .then((value) => post_DailyComparison());
+                          },
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.collections_bookmark_outlined,
+                              size: _height * 0.03,
+                            ),
+                            title: Text(
+                              "Technician Collection",
+                              style: TextStyle(fontSize: _height * 0.02),
+                            ),
                             // subtitle: Text("Customer CMP: ${model.cmp}"),
                           ),
                         ),

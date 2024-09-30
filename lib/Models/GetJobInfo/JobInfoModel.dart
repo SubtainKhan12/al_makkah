@@ -1,51 +1,59 @@
 import 'dart:convert';
-/// id : "2"
-/// tjobnum : "000002"
-/// tjobdat : "2024-08-26"
-/// tjobtim : "05:48:39"
-/// tjobtyp : "REPAIRING"
-/// tjobsts : "C"
-/// tmobnum : "03023244304"
-/// tcstnam : "BILAL ALI"
-/// tadd001 : "NOOR SHAH ROAD 50/3R"
-/// tadd002 : "."
-/// tphnnum : "03023244304"
-/// temladd : "BILALALI@GMAIL.COM"
-/// tnicnum : "0000000000000"
+/// id : "15"
+/// tjobnum : "000013"
+/// tjobdat : "2024-09-22"
+/// tjobtim : "03:53:38"
+/// tjobtyp : ""
+/// tjobsts : "S"
+/// tmobnum : "03007251437"
+/// tcstnam : "SAKHAWT ALI"
+/// tadd001 : "20/GD"
+/// tadd002 : ""
+/// tphnnum : ""
+/// temladd : ""
+/// tnicnum : ""
 /// tctycod : "001"
 /// tcmpcod : "001"
-/// tctgcod : "001"
-/// titmdsc : "FREEZER"
-/// tcptcod : "001"
-/// trefcod : "001"
-/// tinvnum : "2222222"
-/// tpurdat : "2024-06-05"
+/// tctgcod : "016"
+/// titmdsc : ""
+/// tcptcod : "005"
+/// trefcod : "004"
+/// tinvnum : ""
+/// tpurdat : "1970-01-01"
 /// twrnsts : ""
-/// tjobrem : "THIS COMPLAIN IS FOR BILAL SAHAB"
-/// ttchcod : "001"
-/// tfwddat : "2024-09-05"
-/// tfwdtim : "14:16:58"
+/// tjobrem : ""
+/// ttchcod : "003"
+/// tfwddat : "2024-09-22"
+/// tfwdtim : "10:54:12"
 /// trefnum : "null"
-/// titmser : "54646445645"
-/// tdat001 : "2024-09-06"
+/// titmser : ""
+/// tdat001 : "2024-09-22"
 /// tdat002 : null
 /// tdat003 : null
 /// tdat004 : null
-/// trem001 : "KAL CHECK KRWANA HAI "
+/// trem001 : "relay overload change Rs.1000"
 /// trem002 : null
 /// trem003 : null
 /// trem004 : null
-/// tinsdat : "2024-08-26"
+/// tinsdat : "2024-09-22"
 /// tinsusr : "74"
 /// tupddat : null
 /// tupdusr : null
-/// tclsdat : "2024-08-29"
-/// tjobamt : "550.00"
-/// tclsrem : "LGA DIA HAI "
-/// Company : "HAIR"
-/// Category : "FREEZER"
-/// Technician : "IRFAN"
-/// Mobile : "03053421934"
+/// tclsdat : "2024-09-23"
+/// tjobamt : "1000.00"
+/// tprtamt : null
+/// trat001 : null
+/// trat002 : null
+/// trat003 : null
+/// trat004 : null
+/// tclsrem : "relay tabdeel unit ok"
+/// tvstimg : null
+/// tcolamt : "1000"
+/// tcoldat : "2024-09-30"
+/// Company : "HAIR "
+/// Category : "fridge"
+/// Technician : "ABRAR"
+/// Mobile : "03126568270"
 /// City : "OKARA"
 
 JobInfoModel jobInfoModelFromJson(String str) => JobInfoModel.fromJson(json.decode(str));
@@ -94,7 +102,15 @@ class JobInfoModel {
       dynamic tupdusr, 
       String? tclsdat, 
       String? tjobamt, 
+      dynamic tprtamt, 
+      dynamic trat001, 
+      dynamic trat002, 
+      dynamic trat003, 
+      dynamic trat004, 
       String? tclsrem, 
+      dynamic tvstimg, 
+      String? tcolamt, 
+      String? tcoldat, 
       String? company, 
       String? category, 
       String? technician, 
@@ -142,7 +158,15 @@ class JobInfoModel {
     _tupdusr = tupdusr;
     _tclsdat = tclsdat;
     _tjobamt = tjobamt;
+    _tprtamt = tprtamt;
+    _trat001 = trat001;
+    _trat002 = trat002;
+    _trat003 = trat003;
+    _trat004 = trat004;
     _tclsrem = tclsrem;
+    _tvstimg = tvstimg;
+    _tcolamt = tcolamt;
+    _tcoldat = tcoldat;
     _company = company;
     _category = category;
     _technician = technician;
@@ -193,7 +217,15 @@ class JobInfoModel {
     _tupdusr = json['tupdusr'];
     _tclsdat = json['tclsdat'];
     _tjobamt = json['tjobamt'];
+    _tprtamt = json['tprtamt'];
+    _trat001 = json['trat001'];
+    _trat002 = json['trat002'];
+    _trat003 = json['trat003'];
+    _trat004 = json['trat004'];
     _tclsrem = json['tclsrem'];
+    _tvstimg = json['tvstimg'];
+    _tcolamt = json['tcolamt'];
+    _tcoldat = json['tcoldat'];
     _company = json['Company'];
     _category = json['Category'];
     _technician = json['Technician'];
@@ -242,7 +274,15 @@ class JobInfoModel {
   dynamic _tupdusr;
   String? _tclsdat;
   String? _tjobamt;
+  dynamic _tprtamt;
+  dynamic _trat001;
+  dynamic _trat002;
+  dynamic _trat003;
+  dynamic _trat004;
   String? _tclsrem;
+  dynamic _tvstimg;
+  String? _tcolamt;
+  String? _tcoldat;
   String? _company;
   String? _category;
   String? _technician;
@@ -290,7 +330,15 @@ JobInfoModel copyWith({  String? id,
   dynamic tupdusr,
   String? tclsdat,
   String? tjobamt,
+  dynamic tprtamt,
+  dynamic trat001,
+  dynamic trat002,
+  dynamic trat003,
+  dynamic trat004,
   String? tclsrem,
+  dynamic tvstimg,
+  String? tcolamt,
+  String? tcoldat,
   String? company,
   String? category,
   String? technician,
@@ -338,7 +386,15 @@ JobInfoModel copyWith({  String? id,
   tupdusr: tupdusr ?? _tupdusr,
   tclsdat: tclsdat ?? _tclsdat,
   tjobamt: tjobamt ?? _tjobamt,
+  tprtamt: tprtamt ?? _tprtamt,
+  trat001: trat001 ?? _trat001,
+  trat002: trat002 ?? _trat002,
+  trat003: trat003 ?? _trat003,
+  trat004: trat004 ?? _trat004,
   tclsrem: tclsrem ?? _tclsrem,
+  tvstimg: tvstimg ?? _tvstimg,
+  tcolamt: tcolamt ?? _tcolamt,
+  tcoldat: tcoldat ?? _tcoldat,
   company: company ?? _company,
   category: category ?? _category,
   technician: technician ?? _technician,
@@ -387,7 +443,15 @@ JobInfoModel copyWith({  String? id,
   dynamic get tupdusr => _tupdusr;
   String? get tclsdat => _tclsdat;
   String? get tjobamt => _tjobamt;
+  dynamic get tprtamt => _tprtamt;
+  dynamic get trat001 => _trat001;
+  dynamic get trat002 => _trat002;
+  dynamic get trat003 => _trat003;
+  dynamic get trat004 => _trat004;
   String? get tclsrem => _tclsrem;
+  dynamic get tvstimg => _tvstimg;
+  String? get tcolamt => _tcolamt;
+  String? get tcoldat => _tcoldat;
   String? get company => _company;
   String? get category => _category;
   String? get technician => _technician;
@@ -438,7 +502,15 @@ JobInfoModel copyWith({  String? id,
     map['tupdusr'] = _tupdusr;
     map['tclsdat'] = _tclsdat;
     map['tjobamt'] = _tjobamt;
+    map['tprtamt'] = _tprtamt;
+    map['trat001'] = _trat001;
+    map['trat002'] = _trat002;
+    map['trat003'] = _trat003;
+    map['trat004'] = _trat004;
     map['tclsrem'] = _tclsrem;
+    map['tvstimg'] = _tvstimg;
+    map['tcolamt'] = _tcolamt;
+    map['tcoldat'] = _tcoldat;
     map['Company'] = _company;
     map['Category'] = _category;
     map['Technician'] = _technician;

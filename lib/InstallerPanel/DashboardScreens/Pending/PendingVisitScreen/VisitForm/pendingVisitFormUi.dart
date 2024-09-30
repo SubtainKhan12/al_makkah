@@ -151,8 +151,10 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                             Container(
                                 // width: _width * 0.25,
                                 child: Flexible(
-                              child: Text(
-                                  widget.getJobInfo.tcstnam.toString().trim()),
+                              child: Flexible(
+                                child: Text(
+                                    widget.getJobInfo.tcstnam.toString().trim()),
+                              ),
                             ))
                           ],
                         ),
@@ -175,9 +177,11 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                             ),
                             Container(
                                 // width: _width * 0.25,
-                                child: Text(widget.getJobInfo.tadd001
-                                    .toString()
-                                    .trim())),
+                                child: Flexible(
+                                  child: Text(widget.getJobInfo.tadd001
+                                      .toString()
+                                      .trim()),
+                                )),
                           ],
                         ),
                       ),
@@ -199,9 +203,11 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                             ),
                             Container(
                                 // width: _width * 0.25,
-                                child: Text(widget.getJobInfo.tadd002
-                                    .toString()
-                                    .trim()))
+                                child: Flexible(
+                                  child: Text(widget.getJobInfo.tadd002
+                                      .toString()
+                                      .trim()),
+                                ))
                           ],
                         ),
                       ),

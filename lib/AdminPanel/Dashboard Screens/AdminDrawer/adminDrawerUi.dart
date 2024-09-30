@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../DrawerPages/DailySaleReport/dailySaleReport.dart';
+import '../DrawerPages/GetCollection/getCollection.dart';
 
 
 class AdminDrawerUI extends StatefulWidget {
@@ -35,7 +36,14 @@ class _AdminDrawerUIState extends State<AdminDrawerUI> {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>DailyJobReport()));
             },
           ),
-
+          ListTile(
+            leading: Icon(Icons.collections_bookmark_outlined),
+            title: Text('Collection Report',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Colors.grey.shade700),),
+            dense: true,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>GetCollectionUI()));
+            },
+          ),
 
         ],
       ),
