@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../DrawerPages/DailySaleReport/dailySaleReport.dart';
 import '../DrawerPages/GetCollection/getCollection.dart';
+import '../DrawerPages/TechnicianPayments/technicianPayments.dart';
 
 
 class AdminDrawerUI extends StatefulWidget {
@@ -42,6 +43,14 @@ class _AdminDrawerUIState extends State<AdminDrawerUI> {
             dense: true,
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context)=>GetCollectionUI()));
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.payment),
+            title: Text('Technician Payments',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Colors.grey.shade700),),
+            dense: true,
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>TechnicianPaymentsUI()));
             },
           ),
 
