@@ -1131,6 +1131,49 @@ class _PendingCustomerDetailState extends State<PendingCustomerDetail> {
                                     ),
                                   ),
                                   if (jobsInfoList[index]
+                                      .tprtamt
+                                      .toString()
+                                      .trim() !=
+                                      'null'
+                                  )
+                                    Container(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                              width: _width * 0.22,
+                                              child: const Text(
+                                                'Parts Amt',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold),
+                                              )),
+                                          Container(
+                                            width: _width * 0.02,
+                                            child: const Text(
+                                              ':',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Container(
+                                            // width: _width * 0.25,
+                                              child: Flexible(
+                                                child: Text(
+                                                  jobsInfoList[index]
+                                                      .tprtamt
+                                                      .toString()
+                                                      .trim(),
+                                                  style: TextStyle(
+                                                      color: ColorsUtils.redColor,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  if (jobsInfoList[index]
                                       .tjobamt
                                       .toString()
                                       .trim() !=

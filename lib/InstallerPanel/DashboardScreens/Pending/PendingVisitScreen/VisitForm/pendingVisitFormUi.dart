@@ -35,9 +35,8 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
   // DateTime selectedInitialDate = DateTime.now();
   String? status = 'Pending';
   String? warranty;
+  String? jobType = 'REPAIRING';
   File? _image;
-
-
 
   @override
   void initState() {
@@ -152,8 +151,9 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                                 // width: _width * 0.25,
                                 child: Flexible(
                               child: Flexible(
-                                child: Text(
-                                    widget.getJobInfo.tcstnam.toString().trim()),
+                                child: Text(widget.getJobInfo.tcstnam
+                                    .toString()
+                                    .trim()),
                               ),
                             ))
                           ],
@@ -178,10 +178,9 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                             Container(
                                 // width: _width * 0.25,
                                 child: Flexible(
-                                  child: Text(widget.getJobInfo.tadd001
-                                      .toString()
-                                      .trim()),
-                                )),
+                              child: Text(
+                                  widget.getJobInfo.tadd001.toString().trim()),
+                            )),
                           ],
                         ),
                       ),
@@ -204,10 +203,9 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                             Container(
                                 // width: _width * 0.25,
                                 child: Flexible(
-                                  child: Text(widget.getJobInfo.tadd002
-                                      .toString()
-                                      .trim()),
-                                ))
+                              child: Text(
+                                  widget.getJobInfo.tadd002.toString().trim()),
+                            ))
                           ],
                         ),
                       ),
@@ -313,17 +311,55 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                 items: <String>[
                   'Pending',
                   'Done',
-                  'WorkShop',
                   'Cancel',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value,style: TextStyle(fontSize: 14),),
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 14),
+                    ),
                   );
                 }).toList(),
                 decoration: InputDecoration(
                   labelText: "Status",
-
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(3),
+                    borderSide: const BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width / 0.3,
+              height: MediaQuery.of(context).size.height / 16,
+              child: DropdownButtonFormField<String>(
+                value: jobType,
+                onChanged: (newValue) {
+                  setState(() {
+                    jobType = newValue;
+                  });
+                },
+                items: <String>[
+                  'REPAIRING',
+                  'INSTALLATION',
+                  'WORKSHOP',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  );
+                }).toList(),
+                decoration: InputDecoration(
+                  labelText: "Job Type",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(3),
                     borderSide: const BorderSide(
@@ -382,7 +418,9 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
                     'Warranty:',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(width: _width * 0.04,),
+                  SizedBox(
+                    width: _width * 0.04,
+                  ),
                   Expanded(
                     child: RadioListTile<String>(
                       title: const Text('Yes'),
@@ -536,9 +574,19 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
 
   setComplainData() {
     String formattedDate = DateFormat("dd-MM-yyyy").format(cdate1);
-    _itemController.text = widget.getJobInfo.titmdsc.toString().trim() ?? '0';
+    _itemController.text = widget.getJobInfo.category.toString().trim() ?? '0';
     _dateController.text = formattedDate;
     warranty = widget.getJobInfo.twrnsts.toString().trim() ?? '0';
+    _partsAmountController.text =
+        widget.getJobInfo.tprtamt.toString().trim() == 'null'
+            ? '0.00'
+            : _partsAmountController.text =
+                widget.getJobInfo.tprtamt.toString().trim() ?? '0';
+    _jobAmountController.text =
+        widget.getJobInfo.tjobamt.toString().trim() == 'null'
+            ? '0.00'
+            : _jobAmountController.text =
+                widget.getJobInfo.tjobamt.toString().trim() ?? '0';
   }
 
   Future<void> _intSelectDate(
@@ -567,6 +615,7 @@ class _PendingVisitFormUIState extends State<PendingVisitFormUI> {
     request.fields['FPrtAmt'] = _partsAmountController.text;
     request.fields['FJobAmt'] = _jobAmountController.text;
     request.fields['FWrnSts'] = warranty.toString();
+    request.fields['FJobTyp'] = jobType.toString();
     request.fields['FwdDat'] = widget.getJobInfo.tfwddat.toString();
     request.fields['FTchCod'] = widget.getJobInfo.ttchcod.toString();
 

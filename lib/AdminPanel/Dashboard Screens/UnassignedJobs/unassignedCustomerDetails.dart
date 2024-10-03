@@ -1145,6 +1145,7 @@ class _UnassignedCustomerDetailsState extends State<UnassignedCustomerDetails> {
                                         ],
                                       ),
                                     ),
+
                                 ],
                               )),
                         ),
