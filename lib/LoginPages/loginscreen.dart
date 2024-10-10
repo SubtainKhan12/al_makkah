@@ -92,7 +92,7 @@ class _LoginUIState extends State<LoginUI> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: _height * 0.05,
+                      height: _height * 0.1,
 
                     ),
                     SizedBox(
@@ -135,49 +135,50 @@ class _LoginUIState extends State<LoginUI> {
                             )),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'New Job',
-                                style: TextStyle(color: ColorsUtils.baigeColor,
-                                    fontSize: _height * 0.017),
-                              )),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const RegisterUI()));
-                            },
-                            child: Text(
-                              "Register",
-                              style: TextStyle(color: ColorsUtils.baigeColor,
-                                  fontSize: _height * 0.017),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Forget Password",
-                            style: TextStyle(color: ColorsUtils.baigeColor,
-                                fontSize: _height * 0.017),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 30),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       TextButton(
+                    //           onPressed: () {},
+                    //           child: Text(
+                    //             'New Job',
+                    //             style: TextStyle(color: ColorsUtils.baigeColor,
+                    //                 fontSize: _height * 0.017),
+                    //           )),
+                    //       TextButton(
+                    //         onPressed: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) =>
+                    //                   const RegisterUI()));
+                    //         },
+                    //         child: Text(
+                    //           "Register",
+                    //           style: TextStyle(color: ColorsUtils.baigeColor,
+                    //               fontSize: _height * 0.017),
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    //   child: Align(
+                    //     alignment: Alignment.topRight,
+                    //     child: TextButton(
+                    //       onPressed: () {},
+                    //       child: Text(
+                    //         "Forget Password",
+                    //         style: TextStyle(color: ColorsUtils.baigeColor,
+                    //             fontSize: _height * 0.017),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    SizedBox(height: _height * 0.06,),
                     InkWell(
                       onTap: () {
                         post_login();
@@ -210,192 +211,192 @@ class _LoginUIState extends State<LoginUI> {
                 height: _height * 0.015,
 
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomersUI()));
-                          },
-                          child: Material(
-                            borderRadius: BorderRadius.circular(20),
-                            elevation: 10,
-                            shadowColor: const Color(0xffF6EACB),
-                            child: Container(
-                              height: _height * 0.06,
-                              width: _width * 0.4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF6EACB),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: _width * 0.03,
-                                  ),
-                                  Image.asset(
-                                    'assets/install.png',
-                                    color: Colors.blueAccent,
-                                    height: _height * 0.03,
-                                  ),
-                                  const VerticalDivider(
-                                    color: Colors.grey,
-                                    thickness: 1,
-                                  ),
-                                  // SizedBox(width: 20,),
-                                  Text(
-                                    'AC Installation',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: _height * 0.014),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
-                          },
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            elevation: 10,
-                            shadowColor: const Color(0xffF6EACB),
-                            child: Container(
-                              height: _height * 0.06,
-                              width: _width * 0.4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF6EACB),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: _width * 0.03,
-                                  ),
-                                  Image.asset(
-                                    'assets/clean.png',
-                                    color: Colors.blueAccent,
-                                    height: _height * 0.03,
-                                  ),
-                                  const VerticalDivider(
-                                    color: Colors.grey,
-                                    thickness: 1,
-                                  ),
-                                  // SizedBox(width: 20,),
-                                  Text(
-                                    'Ac Service',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: _height * 0.014),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: _height * 0.012,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => NewComplainUI()));
-                          },
-                          child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            elevation: 10,
-                            shadowColor: const Color(0xffF6EACB),
-                            child: Container(
-                              height: _height * 0.06,
-                              width: _width * 0.4,
-                              decoration: BoxDecoration(
-                                color: const Color(0xffF6EACB),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: _width * 0.03,
-                                  ),
-                                  Image.asset(
-                                    'assets/complaint.png',
-                                    color: Colors.red,
-                                    height: _height * 0.03,
-                                  ),
-                                  const VerticalDivider(
-                                    color: Colors.grey,
-                                    thickness: 1,
-                                  ),
-                                  // SizedBox(width: 20,),
-                                  Text(
-                                    'New Complain',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: _height * 0.014),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Material(
-                          borderRadius: BorderRadius.circular(5),
-                          elevation: 10,
-                          shadowColor: const Color(0xffF6EACB),
-                          child: Container(
-                            height: _height * 0.06,
-                            width: _width * 0.4,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffF6EACB),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: _width * 0.03,
-                                ),
-                                Image.asset(
-                                  'assets/customer-ratings.png',
-                                  color: Colors.red,
-                                  height: _height * 0.03,
-                                ),
-                                const VerticalDivider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                ),
-                                // SizedBox(width: 20,),
-                                Text(
-                                  'Complain Status',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: _height * 0.014),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //   child: Column(
+              //     children: [
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //         children: [
+              //           InkWell(
+              //             onTap: () {
+              //               // Navigator.push(context, MaterialPageRoute(builder: (context)=>CustomersUI()));
+              //             },
+              //             child: Material(
+              //               borderRadius: BorderRadius.circular(20),
+              //               elevation: 10,
+              //               shadowColor: const Color(0xffF6EACB),
+              //               child: Container(
+              //                 height: _height * 0.06,
+              //                 width: _width * 0.4,
+              //                 decoration: BoxDecoration(
+              //                   color: const Color(0xffF6EACB),
+              //                   borderRadius: BorderRadius.circular(5),
+              //                 ),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.start,
+              //                   children: [
+              //                     SizedBox(
+              //                       width: _width * 0.03,
+              //                     ),
+              //                     Image.asset(
+              //                       'assets/install.png',
+              //                       color: Colors.blueAccent,
+              //                       height: _height * 0.03,
+              //                     ),
+              //                     const VerticalDivider(
+              //                       color: Colors.grey,
+              //                       thickness: 1,
+              //                     ),
+              //                     // SizedBox(width: 20,),
+              //                     Text(
+              //                       'AC Installation',
+              //                       style: TextStyle(
+              //                           fontWeight: FontWeight.w500,
+              //                           fontSize: _height * 0.014),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //           InkWell(
+              //             onTap: () {
+              //               // Navigator.push(context, MaterialPageRoute(builder: (context)=> ExpenseUI()));
+              //             },
+              //             child: Material(
+              //               borderRadius: BorderRadius.circular(5),
+              //               elevation: 10,
+              //               shadowColor: const Color(0xffF6EACB),
+              //               child: Container(
+              //                 height: _height * 0.06,
+              //                 width: _width * 0.4,
+              //                 decoration: BoxDecoration(
+              //                   color: const Color(0xffF6EACB),
+              //                   borderRadius: BorderRadius.circular(5),
+              //                 ),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.start,
+              //                   children: [
+              //                     SizedBox(
+              //                       width: _width * 0.03,
+              //                     ),
+              //                     Image.asset(
+              //                       'assets/clean.png',
+              //                       color: Colors.blueAccent,
+              //                       height: _height * 0.03,
+              //                     ),
+              //                     const VerticalDivider(
+              //                       color: Colors.grey,
+              //                       thickness: 1,
+              //                     ),
+              //                     // SizedBox(width: 20,),
+              //                     Text(
+              //                       'Ac Service',
+              //                       style: TextStyle(
+              //                           fontWeight: FontWeight.w500,
+              //                           fontSize: _height * 0.014),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //       SizedBox(
+              //         height: _height * 0.012,
+              //       ),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //         children: [
+              //           InkWell(
+              //             onTap: () {
+              //               Navigator.push(context, MaterialPageRoute(
+              //                   builder: (context) => NewComplainUI()));
+              //             },
+              //             child: Material(
+              //               borderRadius: BorderRadius.circular(5),
+              //               elevation: 10,
+              //               shadowColor: const Color(0xffF6EACB),
+              //               child: Container(
+              //                 height: _height * 0.06,
+              //                 width: _width * 0.4,
+              //                 decoration: BoxDecoration(
+              //                   color: const Color(0xffF6EACB),
+              //                   borderRadius: BorderRadius.circular(5),
+              //                 ),
+              //                 child: Row(
+              //                   mainAxisAlignment: MainAxisAlignment.start,
+              //                   children: [
+              //                     SizedBox(
+              //                       width: _width * 0.03,
+              //                     ),
+              //                     Image.asset(
+              //                       'assets/complaint.png',
+              //                       color: Colors.red,
+              //                       height: _height * 0.03,
+              //                     ),
+              //                     const VerticalDivider(
+              //                       color: Colors.grey,
+              //                       thickness: 1,
+              //                     ),
+              //                     // SizedBox(width: 20,),
+              //                     Text(
+              //                       'New Complain',
+              //                       style: TextStyle(
+              //                           fontWeight: FontWeight.w500,
+              //                           fontSize: _height * 0.014),
+              //                     ),
+              //                   ],
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //           Material(
+              //             borderRadius: BorderRadius.circular(5),
+              //             elevation: 10,
+              //             shadowColor: const Color(0xffF6EACB),
+              //             child: Container(
+              //               height: _height * 0.06,
+              //               width: _width * 0.4,
+              //               decoration: BoxDecoration(
+              //                 color: const Color(0xffF6EACB),
+              //                 borderRadius: BorderRadius.circular(5),
+              //               ),
+              //               child: Row(
+              //                 mainAxisAlignment: MainAxisAlignment.start,
+              //                 children: [
+              //                   SizedBox(
+              //                     width: _width * 0.03,
+              //                   ),
+              //                   Image.asset(
+              //                     'assets/customer-ratings.png',
+              //                     color: Colors.red,
+              //                     height: _height * 0.03,
+              //                   ),
+              //                   const VerticalDivider(
+              //                     color: Colors.grey,
+              //                     thickness: 1,
+              //                   ),
+              //                   // SizedBox(width: 20,),
+              //                   Text(
+              //                     'Complain Status',
+              //                     style: TextStyle(
+              //                         fontWeight: FontWeight.w500,
+              //                         fontSize: _height * 0.014),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       )
+              //     ],
+              //   ),
+              // ),
               SizedBox(
-                height: _height * 0.08,
+                height: _height * 0.21,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
